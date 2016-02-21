@@ -16,7 +16,7 @@ URL: http://www.youpzt.com/
 
 <h2>相关</h2>
 1,如果你希望保持最新的更新，可以通过github获取当前最新的版本（完整版）。
-2,官网提供了稳定版本的下载：http://www.youpzt.cn/wp-youpzt-messages
+2,官网提供了稳定版本的下载：http://www.youpzt.com/wp-youpzt-messages
 3,wp-youpzt-messages插件为了做到更好更方便使用，感谢这些免费项目（排名不分先后）
 	.Private Messages For WordPress
 	.Front End PM
