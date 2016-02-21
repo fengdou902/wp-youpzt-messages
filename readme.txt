@@ -21,10 +21,6 @@ URL: http://www.youpzt.com/
 	.Private Messages For WordPress
 	.Front End PM
 
-**优化列表:**
-1，去除加载语言包，源码汉化，性能提升更好。
-2，可查看对方是否已读信。
-
 == 常见问题 ==
 
 = 如何设置允许指定的用户发送站内信? =
@@ -53,7 +49,7 @@ URL: http://www.youpzt.com/
 == 更新日志 ==
 
 = 1.0 =
-* Bug fix: Send to multiple recipient
-* Improvement: Add hooks to pages
-* Improvement: Better retrieve user list
+**优化列表:**
+* 去除加载语言包，源码汉化，性能提升更好。
+* 可查看对方是否已读信。
 
