@@ -6,7 +6,7 @@
  * @url: http://www.deluxeblogtips.com
  * @email: rilwis@gmail.com
  
- Template Name: 消息模板
+ Template Name: 站内信模板
  
  */
  ?>

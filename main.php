@@ -2,7 +2,7 @@
 /*
 Plugin Name: 站内信youpzt-messages
 Plugin URI: http://www.youpzt.com/youpzt-messages
-Description:允许你的WordPress网站用户之间可进行站内信互通
+Description:允许你的WordPress网站用户之间可进行站内信互相通信
 Version: 1.0
 Author: youpzt
 Author URI: http://www.youpzt.com

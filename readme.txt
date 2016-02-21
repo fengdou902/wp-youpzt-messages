@@ -1,59 +1,52 @@
-=== Plugin Name ===
-Contributors: youpzt
-link: http://www.youpzt.com/
-Tags: pm, private message, private messages, message, messages
-Requires at least: 3.0
-Tested up to: 3.4.2
-Stable tag: 2.1.10
+=== 插件信息 ===
 
-The Private Messages For WordPress allows users of WordPress blog send private messages (PM) to each other, just like in a forum.
+插件名: 站内信youpzt-messages
+URL: http://www.youpzt.com/
+标签: 站内信，通信，信息
+版本: 1.0
 
-== Description ==
+这个WordPress站内信插件允许你的WordPress网站用户之间可进行站内信互相通信
 
-[Project Page](http://www.deluxeblogtips.com/private-messages-for-wordpress) | [Support](http://www.deluxeblogtips.com/support) | [Donate](http://www.deluxeblogtips.com/donate)
+== 描述 ==
 
-*The Private Messages For WordPress allows users of WordPress blog send private messages (PM) to each other*.  Users will have their own inbox and outbox. Administrators of blog can  control total numbers of items in mailbox of each user group (Administrator, Editor, Author, Constributor and Subscriber).
+[项目主页](http://www.youpzt.com/wp-youpzt-messages) 
 
-Also, an email is sent to user when a new PM is received. Email template is full-controlled.
+*这个WordPress站内信插件允许你的WordPress网站用户之间可进行站内信互相通信*，用户有自己的收件箱和发件箱，超级管理员拥有所有用户组(Administrator, Editor, Author, Constributor and Subscriber)的站内信操作权限。
+
+1，同时可以进行站内信发送，同时让用户接收邮件通知。
+2，提供前台站内信模板，让用户自己在前台进行管理。
 
 **优化列表:**
 1，去除加载语言包，源码汉化，性能提升更好。
 2，可查看对方是否已读信。
 
-== Frequently Asked Questions ==
+== 常见问题 ==
 
 = How can I set the number of private messages for each user? =
 
 You can set number of PM for only user role (group): Administrator, Editor, Author, Contributor, Subscriber. The option is in the plugin option page (`Settings` > `Private Messages`)
 
-= How can I delete my old PM? =
+= 如何删除我的旧的站内信? =
 
-Go to `Inbox` or `Outbox`, and click the link `Delete` after each message to delete it. Or you can check multiple messages and select `Delete` action from the dropdown box.
+进入『收件箱』或者『已发送』点击删除按钮可以删除对应的站内信， 你也能点击下拉框进行批量操作删除站内信。
 
-= How can I reply to sender? =
+= 我如何给发送者进行回复? =
 
-Just click the `Reply` link below the message in your `Inbox`.
+进入『收件箱』点击消息的回复按钮。
 
-= What can I do if I exceed my limit? =
+= 如果超过了发件限制，我该如何操作? =
 
-You can delete your old PM (see previous question) or ask admin to increase the mailbox quota.
+你可以删除旧的站内信(see previous question) or ask admin to increase the mailbox quota.
 
-= How can use this plugin in the front-end =
+= 如何进行使用前台站内信模板 =
 
-1. Copy the file `pm4wp-template.php` into your theme folder
-1. Create a page, choose Private Messages as a page template (in the right panel)
-1. Check it out in the front-page
+1. 复制插件下的 `youpztMessages-template.php` 到你的主题目录下
+2. 在wordpress后台创建一个页面，然后选择站内信模板
+3. 打开页面检测是否成功。
 
-Note: the template file is just the backbone, you should modify it to fit your template.
+提示: 模板文件是主干，你可以针对当前使用主题进行模板的自定义和美化。
 
-== Screenshots ==
-
-1. Inbox
-2. Outbox
-3. Send page
-4. Option page
-
-== Changelog ==
+== 更新日志 ==
 
 = 1.0 =
 * Bug fix: Send to multiple recipient
