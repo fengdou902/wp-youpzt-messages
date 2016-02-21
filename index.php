@@ -1,33 +1,34 @@
 <?php 
-
-register_activation_hook( __FILE__, 'youpzt_message_activate' );
+/* 注册激活插件时要调用的函数 */ 
+register_activation_hook( __FILE__, 'youpzt_messages_activate' );
 /**
  * Create table and register an option when activate
  *
  * @return void
  */
-function youpzt_message_activate()
+function youpzt_messages_activate()
 {
 	global $wpdb;
+	$wpdb->youpzt_messages = $wpdb->prefix . 'youpzt_messages';
+	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');		
+	if( $wpdb->get_var("SHOW TABLES LIKE '$wpdb->youpzt_messages'") != $wpdb->youpzt_messages){
+		// Create table
+		$query = 'CREATE TABLE IF NOT EXISTS ' . $wpdb->youpzt_messages . ' (
+					`id` bigint(20) NOT NULL auto_increment,
+					`msg_type` tinyint(1) DEFAULT NULL,
+					`subject` text NOT NULL,
+					`content` text NOT NULL,
+					`sender` varchar(60) NOT NULL,
+					`recipient` varchar(60) NOT NULL,
+					`date` datetime NOT NULL,
+					`read` tinyint(1) NOT NULL,
+					`deleted` tinyint(1) NOT NULL,
+					PRIMARY KEY (`id`)
+				) COLLATE utf8_general_ci;';
 
-	// Create table
-	$query = 'CREATE TABLE IF NOT EXISTS ' . $wpdb->youpzt_messages . ' (
-		`id` bigint(20) NOT NULL auto_increment,
-		`msg_type` tinyint(1) DEFAULT NULL,
-		`subject` text NOT NULL,
-		`content` text NOT NULL,
-		`sender` varchar(60) NOT NULL,
-		`recipient` varchar(60) NOT NULL,
-		`date` datetime NOT NULL,
-		`read` tinyint(1) NOT NULL,
-		`deleted` tinyint(1) NOT NULL,
-		PRIMARY KEY (`id`)
-	) COLLATE utf8_general_ci;';
-
-	// Note: deleted = 1 if message is deleted by sender, = 2 if it is deleted by recipient
-
-	$wpdb->query( $query );
-
+		dbDelta($query);
+		//$wpdb->query( $query );
+	 }
 	// Default numbers of PM for each group
 	$default_option = array(
 		'administrator' => 0,
@@ -44,15 +45,20 @@ function youpzt_message_activate()
 	);
 	add_option( 'youpzt_messages_option', $default_option, '', 'no' );
 }
+global $pagenow;
+$admin_page_GET=isset($_GET['page'])?$_GET['page']:false;
+if (is_admin()&&$admin_page_GET=='youpzt_messages_option'&& isset( $_GET['active'])){
 
+	youpzt_messages_activate();//创建数据库
+}
 /**
  * define youpzt_messages table in wpdb
  */
-if (!function_exists('youpzt_messages_define_table')) {
-		function youpzt_messages_define_table() {
+if (!function_exists('youpztMessages_define_table')) {
+		function youpztMessages_define_table() {
 			global $wpdb;
 			$wpdb->youpzt_messages = $wpdb->prefix . 'youpzt_messages';
 		}
 }
-add_action( 'init', 'youpzt_messages_define_table' );
+add_action( 'init', 'youpztMessages_define_table' );
 ?>

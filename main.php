@@ -21,8 +21,9 @@ define( 'YPM_INC_DIR', trailingslashit( YPM_DIR . 'includes' ) );
 define( 'YPM_URL', plugin_dir_url( __FILE__ ) );
 define( 'YPM_CSS_URL', trailingslashit( YPM_URL . 'css' ) );
 define( 'YPM_JS_URL', trailingslashit( YPM_URL . 'js' ) );
+define( 'YPM_IMG_URL', trailingslashit( YPM_URL . 'images' ) );
 
-include_once YPM_DIR . '/index.php';
+include_once YPM_DIR . 'index.php';
 include_once YPM_INC_DIR . 'widget.php';
 include_once YPM_INC_DIR . 'inbox-page.php';
 include_once YPM_INC_DIR . 'send-page.php';

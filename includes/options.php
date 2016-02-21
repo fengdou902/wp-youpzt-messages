@@ -27,10 +27,9 @@ function youpzt_messages_add_menu()
 		$num_unread = 0;
 
 	// Option page
-	add_options_page( __( '站内信设置', 'youpzt' ), __( '站内信', 'youpzt' ), 'manage_options', 'youpzt_messages_option', 'youpzt_messages_option_page' );
 
 	// Add Private Messages Menu
-	$icon_url = YPM_URL . 'icon.png';
+	$icon_url = YPM_IMG_URL . 'icon.png';
 	add_menu_page( __( '站内信', 'youpzt' ), __( '站内信', 'youpzt' ) . "<span class='update-plugins count-$num_unread'><span class='plugin-count'>$num_unread</span></span>", 'read', 'youpzt_messages_inbox', 'youpzt_messages_inbox', $icon_url );
 
 	// 收件箱 page
@@ -44,6 +43,8 @@ function youpzt_messages_add_menu()
 	// Send page
 	$send_page = add_submenu_page( 'youpzt_messages_inbox', __( '发送站内信', 'youpzt' ), __( '发送', 'youpzt' ), 'read', 'youpzt_messages_send', 'youpzt_messages_send' );
 	add_action( "admin_print_styles-{$send_page}", 'youpzt_messages_admin_print_styles_send' );
+
+		add_submenu_page('youpzt_messages_inbox',__( '站内信设置', 'youpzt' ), __( '设置', 'youpzt' ), 'manage_options', 'youpzt_messages_option', 'youpzt_messages_option_page' );
 }
 
 /**
@@ -217,9 +218,9 @@ function youpzt_messages_option_page() {
 	<div style="width:200px;float:right;border:1px solid #ccc;padding:10px">
 		<h3><?php _e( '微信公众号', 'youpzt' ); ?></h3>
 
-		<p>关注我们</p>
+		<p>关注动态，微信扫一扫</p>
 
-		<a href="http://www.youpzt.com/" target="_blank"><img src="https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif" /></a>
+		<a href="http://www.youpzt.com/" target="_blank"><img src="<?php echo YPM_IMG_URL.'youdi_qrcode05.jpg';?>" /></a>
 	</div>
 </div>
 	<?php
