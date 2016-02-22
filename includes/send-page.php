@@ -17,9 +17,9 @@ function youpzt_messages_send()
 
 		// Check if total pm of current user exceed limit
 		$role = $current_user->roles[0];
-		$sender = $current_user->user_login;
-		$total = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $wpdb->youpzt_messages.' WHERE `sender` = "' . $sender . '" OR `recipient` = "' . $sender . '"' );
-		if ( ( $option[$role] != 0 ) && ( $total >= $option[$role] ) )
+		$sender = $current_user->ID;
+		$total = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $wpdb->youpzt_messages.' WHERE `from_user` = "' . $sender . '" OR `to_user` = "' . $sender . '"' );
+		if (($option[$role] != 0 ) && ( $total >= $option[$role]))
 		{
 			$error = true;
 			$status[] = __( '你已经超过了信箱的限制，请删除一些后再发送。', 'youpzt' );
@@ -35,8 +35,8 @@ function youpzt_messages_send()
 		$content = apply_filters( 'youpzt_messages_content_send', $content );
 		
 		// Remove slash automatically in wp
-		$subject = stripslashes( $subject );
-		$content = stripslashes( $content );
+		$subject = stripslashes($subject);
+		$content = stripslashes($content);
 		$recipient = array_map( 'stripslashes', $recipient );
 
 		// Escape sql
@@ -64,33 +64,31 @@ function youpzt_messages_send()
 
 		if ( !$error){
 			$numOK = $numError = 0;
-			foreach ( $recipient as $rec){
-				// get user_login field
-				$rec = $wpdb->get_var( "SELECT user_login FROM $wpdb->users WHERE display_name = '$rec' LIMIT 1" );
+			foreach ( $recipient as $rec_id){
+				
 				$new_message = array(
-					'id'        => NULL,
-					'msg_type'   =>1,
-					'subject'   => $subject,
-					'content'   => $content,
-					'sender'    => $sender,
-					'recipient' => $rec,
-					'date'      => current_time('mysql'),
-					'read'      => 0,
-					'deleted'   => 0
+							'id'        => NULL,
+							'msg_type'   =>1,
+							'from_user'    => $sender,
+							'to_user' => $rec_id,
+							'subject'   => $subject,
+							'content'   => $content,
+							'date'      => current_time('mysql'),
+							'read'      => 0,
+							'deleted'   => 0
 				);
 				// insert into database
-				if ( $wpdb->insert( $wpdb->youpzt_messages, $new_message, array( '%d','%d','%s', '%s', '%s', '%s', '%s', '%d', '%d' ) ) ){
+				if ( $wpdb->insert( $wpdb->youpzt_messages, $new_message, array( '%d','%d','%d', '%d', '%s', '%s', '%s', '%d', '%d' ) ) ){
 					$numOK++;
 					unset( $_REQUEST['recipient'], $_REQUEST['subject'], $_REQUEST['content'] );
 
 					// send email to user
 					if ( $option['email_enable'] )
 					{
-						$sender = $wpdb->get_var( "SELECT display_name FROM $wpdb->users WHERE user_login = '$sender' LIMIT 1" );
-
+						$sender_name=get_userdata($sender)->display_name;
 						// replace tags with values
 						$tags = array( '%BLOG_NAME%', '%BLOG_ADDRESS%', '%SENDER%', '%INBOX_URL%' );
-						$replacement = array( get_bloginfo( 'name' ), get_bloginfo( 'admin_email' ), $sender, admin_url( 'admin.php?page=youpzt_messages_inbox' ) );
+						$replacement = array( get_bloginfo( 'name' ), get_bloginfo( 'admin_email' ), $sender_name, admin_url( 'admin.php?page=youpzt_messages_inbox' ) );
 
 						$email_name = str_replace( $tags, $replacement, $option['email_name'] );
 						$email_address = str_replace( $tags, $replacement, $option['email_address'] );
@@ -112,20 +110,19 @@ function youpzt_messages_send()
 						}
 						$email_body = nl2br( $email_body );
 
-						$recipient_email = $wpdb->get_var( "SELECT user_email from $wpdb->users WHERE display_name = '$rec'" );
+						$recipient_email = $wpdb->get_var( "SELECT user_email from $wpdb->users WHERE ID='$rec_id' LIMIT 1" );
 						$mailtext = "<html><head><title>$email_subject</title></head><body>$email_body</body></html>";
+						if ($recipient_email) {
+								// set headers to send html email
+								$headers = "发送到: $recipient_email\r\n";
+								$headers .= "来者: $email_name <$email_address>\r\n";
+								$headers .= "MIME-Version: 1.0\r\n";
+								$headers .= 'Content-Type: ' . get_bloginfo( 'html_type' ) . '; charset=' . get_bloginfo( 'charset' ) . "\r\n";
+								wp_mail( $recipient_email, $email_subject, $mailtext, $headers );
+						}
 
-						// set headers to send html email
-						$headers = "发送到: $recipient_email\r\n";
-						$headers .= "来者: $email_name <$email_address>\r\n";
-						$headers .= "MIME-Version: 1.0\r\n";
-						$headers .= 'Content-Type: ' . get_bloginfo( 'html_type' ) . '; charset=' . get_bloginfo( 'charset' ) . "\r\n";
-
-						wp_mail( $recipient_email, $email_subject, $mailtext, $headers );
 					}
-				}
-				else
-				{
+				}else{
 					$numError++;
 				}
 			}
@@ -165,7 +162,7 @@ function youpzt_messages_send()
 
 						$content = '<p>&nbsp;</p>';
 						$content .= '<p>---</p>';
-						$content .= '<p><em>' . __( 'In: ', 'youpzt' ) . $msg->date . "\t" . $msg->sender . __( ' Wrote:', 'youpzt' ) . '</em></p>';
+						$content .= '<p><em>' . __( '时间: ', 'youpzt' ) . $msg->date . "\t" . $msg->sender . __( ' Wrote:', 'youpzt' ) . '</em></p>';
 						$content .= wpautop( $msg->content );
 						$content  = stripslashes( $content );
 					}
@@ -190,8 +187,8 @@ function youpzt_messages_send()
 							<?php
 							foreach ( $values as $value )
 							{
-								$selected = ( $value->display_name == $recipient ) ? ' selected="selected"' : '';
-								echo "<option value='$value->display_name'$selected>$value->display_name</option>";
+								$selected = ( $value->ID == $recipient ) ? ' selected="selected"' : '';
+								echo "<option value='$value->ID'$selected>$value->display_name</option>";
 							}
 							?>
 						</select>

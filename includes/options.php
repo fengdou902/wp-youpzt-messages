@@ -1,6 +1,7 @@
 <?php
 add_action( 'admin_init', 'youpzt_messages_init' );
 add_action( 'admin_menu', 'youpzt_messages_add_menu' );
+add_action('admin_menu','youpzt_messages_admin_print_styles_all');
 /**
  * Register plugin option
  *
@@ -42,9 +43,8 @@ function youpzt_messages_add_menu()
 
 	// Send page
 	$send_page = add_submenu_page( 'youpzt_messages_inbox', __( '发送站内信', 'youpzt' ), __( '发送', 'youpzt' ), 'read', 'youpzt_messages_send', 'youpzt_messages_send' );
-	add_action( "admin_print_styles-{$send_page}", 'youpzt_messages_admin_print_styles_send' );
 
-		add_submenu_page('youpzt_messages_inbox',__( '站内信设置', 'youpzt' ), __( '设置', 'youpzt' ), 'manage_options', 'youpzt_messages_option', 'youpzt_messages_option_page' );
+		$option_page = add_submenu_page('youpzt_messages_inbox',__( '站内信设置', 'youpzt' ), __( '设置', 'youpzt' ), 'manage_options', 'youpzt_messages_option', 'youpzt_messages_option_page' );
 }
 
 /**
@@ -52,8 +52,7 @@ function youpzt_messages_add_menu()
  *
  * @return void
  */
-function youpzt_messages_admin_print_styles_inbox()
-{
+function youpzt_messages_admin_print_styles_inbox(){
 	do_action( 'youpzt_messages_print_styles', 'inbox' );
 }
 
@@ -72,13 +71,15 @@ function youpzt_messages_admin_print_styles_outbox()
  *
  * @return void
  */
-function youpzt_messages_admin_print_styles_send()
+function youpzt_messages_admin_print_styles_all()
 {
+	$optimize_get = isset($_GET['page']) ? $_GET['page'] : '';
+	//if(strpos($optimize_get,'youpzt_messages')===true){
     //wp_enqueue_style( 'jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css' );
-	wp_enqueue_style( 'youpzt_messages_css', YPM_CSS_URL . 'style.css' );
-	wp_enqueue_script( 'youpzt_messages_js', YPM_JS_URL . 'script.js', array( 'jquery-ui-autocomplete' ) );
-
-	do_action( 'youpzt_messages_print_styles', 'send' );
+		wp_enqueue_style( 'youpzt_base', YPM_CSS_URL . 'youpzt-base.css' );
+		wp_enqueue_style( 'youpzt_messages_css', YPM_CSS_URL . 'style.css' );
+		wp_enqueue_script( 'youpzt_messages_js', YPM_JS_URL . 'script.js', array( 'jquery-ui-autocomplete' ) );
+	//}
 }
 
 /**
@@ -87,25 +88,20 @@ function youpzt_messages_admin_print_styles_send()
  */
 function youpzt_messages_option_page() {
 	?>
-<div class="wrap">
+<div class="wrap wpbody-content">
 	<h2><?php _e( '站内信设置', 'youpzt' ); ?></h2>
+<h2 class="nav-tab-wrapper">
+	<a href="#options-group-1" id="options-group-1-tab" class="nav-tab nav-tab-active">基本设置</a>
+	<a href="#options-group-2" id="options-group-2-tab" class="nav-tab">安装指南</a>
+</h2>
 
-	<div style="width:600px;float:left">
+<div class="metabox-holder">
+	<div id="options-group-1" class="group " style="width:600px;float:left">
 		<form method="post" action="options.php">
 
 			<?php
 			settings_fields( 'youpzt_messages_option_group' );
 			$option = get_option( 'youpzt_messages_option' );
-
-			if ( empty( $option['hide_update'] ) ) {
-				echo '<div class="updated">',
-				'<p><strong>', __( '1、本插件带有一个用作前台使用的页面模板。', 'youpzt' ), '</strong></p>',
-				'<p>', __( '复制文件 <code>youpztMessages-template.php </code>到您的主题文件夹，使用叫做 <code>消息模板</code> 的模板创建页面。', 'youpzt' ), '</p>',
-				'<p>', __( '这个模板只有基本结构。您应该修改它以让它和您的主题相协调。', 'youpzt' ), '</p>',
-				'<p></p><p><strong>', __( '2、现在您能够把站内信同时发送给多个收件人。', 'youpzt' ), '</strong></p>',
-				'</div>';
-				echo '<input type="checkbox" name="youpzt_messages_option[hide_update]"> ', __( '下次不要显示这条信息。', 'youpzt' );
-			}
 
 			echo '<h3>', __( '请设定每种用户的站内信数量限制:', 'youpzt' ), '</h3>';
 			echo '<p>', __( '<b><i>0</i></b> 表示 <b><i>无限制</i></b>', 'youpzt' ), '</p>';
@@ -215,13 +211,24 @@ function youpzt_messages_option_page() {
 		</form>
 
 	</div>
-	<div style="width:200px;float:right;border:1px solid #ccc;padding:10px">
+	<div class="about_youpzt fr oh">
 		<h3><?php _e( '微信公众号', 'youpzt' ); ?></h3>
-
-		<p>关注动态，微信扫一扫</p>
-
+		<p>关注我们，微信扫一扫</p>
 		<a href="http://www.youpzt.com/" target="_blank"><img src="<?php echo YPM_IMG_URL.'youdi_qrcode05.jpg';?>" /></a>
+		<p>官方QQ群：123456</p>
+	</div>
+	<div id="options-group-2" style="display:none;">
+		<?php 
+		echo '<div class="updated-no">',
+		'<p><strong>', __( '1、本插件带有一个用作前台使用的页面模板。', 'youpzt' ), '</strong></p>',
+		'<p>', __( '复制文件 <code>youpztMessages-template.php </code>到您的主题文件夹，使用叫做 <code>消息模板</code> 的模板创建页面。', 'youpzt' ), '</p>',
+		'<p>', __( '这个模板只有基本结构。您应该修改它以让它和您的主题相协调。', 'youpzt' ), '</p>',
+		'<p></p><p><strong>', __( '2、现在您能够把站内信同时发送给多个收件人。', 'youpzt' ), '</strong></p>',
+		'</div>';
+			?>
+	</div>
 	</div>
 </div>
+
 	<?php
 }

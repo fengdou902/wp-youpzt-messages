@@ -31,6 +31,7 @@ include_once YPM_INC_DIR . 'outbox-page.php';
 
 if ( is_admin() )
 {
+	include_once YPM_INC_DIR . 'functions-admin.php';
 	include_once YPM_INC_DIR . 'options.php';
 }
 

@@ -1,4 +1,4 @@
-=== 插件信息 ===
+=== 项目信息 ===
 
 插件名: wp-youpzt-messages
 URL: http://www.youpzt.com/

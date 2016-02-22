@@ -18,7 +18,8 @@ function youpzt_messages_inbox()
 
 		// select message information
 		$msg = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $id . '" LIMIT 1' );
-		$msg->sender = $wpdb->get_var( "SELECT display_name FROM $wpdb->users WHERE user_login = '$msg->sender'" );
+		$sender_name=get_userdata($msg->from_user)->display_name;
+		//$msg->sender = $wpdb->get_var( "SELECT display_name FROM $wpdb->users WHERE user_login = '$msg->from_user'" );
 		?>
 	<div class="wrap">
 		<h2><?php _e( '收件箱', 'youpzt' ); ?></h2>
@@ -34,7 +35,7 @@ function youpzt_messages_inbox()
 			</thead>
 			<tbody>
 			<tr>
-				<td><?php printf( __( '<b>发件人</b>: %s<br /><b>Date</b>: %s', 'youpzt' ), $msg->sender, $msg->date ); ?></td>
+				<td><?php printf( __( '<b>发件人</b>: %s<br /><b>时间</b>: %s', 'youpzt' ), $sender_name, $msg->date ); ?></td>
 				<td><?php printf( __( '<p><b>主题</b>: %s</p><p>%s</p>', 'youpzt' ), stripcslashes( $msg->subject ) , nl2br( stripcslashes( $msg->content ) ) ); ?></td>
 				<td>
 						<span class="delete">
@@ -43,7 +44,7 @@ function youpzt_messages_inbox()
 						</span>
 						<span class="reply">
 							| <a class="reply"
-							href="<?php echo wp_nonce_url( "?page=youpzt_messages_send&recipient=$msg->sender&id=$msg->id&subject=Re: " . stripcslashes( $msg->subject ), 'ypm-reply_inbox_msg_' . $msg->id ); ?>"><?php _e( '回复', 'youpzt' ); ?></a>
+							href="<?php echo wp_nonce_url( "?page=youpzt_messages_send&recipient=$sender_name&id=$msg->id&subject=Re: " . stripcslashes( $msg->subject ), 'ypm-reply_inbox_msg_' . $msg->id ); ?>"><?php _e( '回复', 'youpzt' ); ?></a>
 						</span>
 				</td>
 			</tr>
@@ -133,7 +134,7 @@ function youpzt_messages_inbox()
 	}
 
 	// show all messages which have not been deleted by this user (deleted status != 2)
-	$msgs = $wpdb->get_results( 'SELECT `id`, `sender`, `subject`, `read`, `date` FROM ' . $wpdb->youpzt_messages.' WHERE `recipient` = "' . $current_user->user_login . '" AND `deleted` != "2" ORDER BY `date` DESC' );
+	$msgs = $wpdb->get_results( 'SELECT `id`, `from_user`, `subject`, `read`, `date` FROM ' . $wpdb->youpzt_messages.' WHERE `to_user` = "' . $current_user->ID . '" AND `deleted` != "2" ORDER BY `date` DESC' );
 	?>
 <div class="wrap">
 	<h2><?php _e( '收件箱', 'youpzt' ); ?><a href="<?php echo admin_url().'admin.php?page=youpzt_messages_send';?>" class="page-title-action">发送</a></h2>
@@ -185,12 +186,13 @@ function youpzt_messages_inbox()
 					<?php
 					foreach ( $msgs as $msg )
 					{
-						$msg->sender = $wpdb->get_var( "SELECT display_name FROM $wpdb->users WHERE user_login = '$msg->sender'" );
+						//$msg->sender = $wpdb->get_var( "SELECT display_name FROM $wpdb->users WHERE user_login = '$msg->sender'" );
+						$sender_name=get_userdata($msg->from_user)->display_name;
 						?>
 					<tr>
 						<th class="check-column"><input type="checkbox" name="id[]" value="<?php echo $msg->id; ?>" />
 						</th>
-						<td><?php echo $msg->sender; ?></td>
+						<td><?php echo $sender_name; ?></td>
 						<td>
 							<?php
 							if ( $msg->read ){
@@ -219,7 +221,7 @@ function youpzt_messages_inbox()
 							</span>
 							<span class="reply">
 								| <a class="reply"
-								href="<?php echo wp_nonce_url( "?page=youpzt_messages_send&recipient=$msg->sender&id=$msg->id&subject=Re: " . stripcslashes( $msg->subject ), 'ypm-reply_inbox_msg_' . $msg->id ); ?>"><?php _e( '回复', 'youpzt' ); ?></a>
+								href="<?php echo wp_nonce_url( "?page=youpzt_messages_send&recipient=$sender_name&id=$msg->id&subject=Re: " . stripcslashes( $msg->subject ), 'ypm-reply_inbox_msg_' . $msg->id ); ?>"><?php _e( '回复', 'youpzt' ); ?></a>
 							</span>
 							</div>
 						</td>

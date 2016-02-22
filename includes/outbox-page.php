@@ -14,7 +14,8 @@ function youpzt_messages_outbox()
 
         // select message information
         $msg = $wpdb->get_row('SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $id . '" LIMIT 1');
-        $msg->recipient = $wpdb->get_var("SELECT display_name FROM $wpdb->users WHERE user_login = '$msg->recipient'");
+       //$msg->recipient = $wpdb->get_var("SELECT display_name FROM $wpdb->users WHERE user_login = '$msg->recipient'");
+        $recipient_name=get_userdata($msg->to_user)->display_name;
         ?>
     <div class="wrap">
         <h2><?php _e('已发信息', 'youpzt'); ?></h2>
@@ -30,7 +31,7 @@ function youpzt_messages_outbox()
             </thead>
             <tbody>
             <tr>
-                <td><?php printf(__('<b>接收者</b>: %s<br /><b>Date</b>: %s', 'youpzt'), $msg->recipient, $msg->date); ?></td>
+                <td><?php printf(__('<b>接收者</b>: %s<br /><b>Date</b>: %s', 'youpzt'),$recipient_name, $msg->date); ?></td>
                 <td><?php printf(__('<p><b>主题</b>: %s</p><p>%s</p>', 'youpzt'), stripcslashes($msg->subject), nl2br(stripcslashes($msg->content))); ?></td>
                 <td>
 						<span class="delete">
@@ -87,7 +88,7 @@ function youpzt_messages_outbox()
     }
 
     // show all messages
-    $msgs = $wpdb->get_results('SELECT `id`, `recipient`, `subject`, `date` FROM ' . $wpdb->youpzt_messages.' WHERE `sender` = "' . $current_user->user_login . '" AND `deleted` != 1 ORDER BY `date` DESC');
+    $msgs = $wpdb->get_results('SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `from_user` = "' . $current_user->ID . '" AND `deleted` != 1 ORDER BY `date` DESC');
     ?>
 <div class="wrap">
     <h2><?php _e('已发信息', 'youpzt'); ?><a href="<?php echo admin_url().'admin.php?page=youpzt_messages_send';?>" class="page-title-action">发送</a></h2>
@@ -122,12 +123,12 @@ function youpzt_messages_outbox()
                 <tbody>
                     <?php
                     foreach ($msgs as $msg) {
-                        $msg->recipient = $wpdb->get_var("SELECT display_name FROM $wpdb->users WHERE user_login = '$msg->recipient'");
+                        $recipient_name=get_userdata($msg->to_user)->display_name;
                         ?>
                     <tr>
                         <th class="check-column"><input type="checkbox" name="id[]" value="<?php echo $msg->id; ?>"/>
                         </th>
-                        <td><a href=""><?php echo get_avatar($msg->recipient,32);echo $msg->recipient; ?></a></td>
+                        <td><a href=""><?php echo get_avatar($msg->to_user,32);echo $recipient_name; ?></a></td>
                         <td>
                             <?php
                             echo '<a href="', wp_nonce_url("?page=youpzt_messages_outbox&action=view&id=$msg->id", 'ypm-view_outbox_msg_' . $msg->id), '">', stripcslashes($msg->subject), '</a>';

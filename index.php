@@ -16,15 +16,15 @@ function youpzt_messages_activate()
 		$query = 'CREATE TABLE IF NOT EXISTS ' . $wpdb->youpzt_messages . ' (
 					`id` bigint(20) NOT NULL auto_increment,
 					`msg_type` tinyint(1) DEFAULT NULL,
+					`from_user` int(11) NOT NULL,
+  				`to_user` int(11) NOT NULL,
 					`subject` text NOT NULL,
 					`content` text NOT NULL,
-					`sender` varchar(60) NOT NULL,
-					`recipient` varchar(60) NOT NULL,
 					`date` datetime NOT NULL,
 					`read` tinyint(1) NOT NULL,
 					`deleted` tinyint(1) NOT NULL,
 					PRIMARY KEY (`id`)
-				) COLLATE utf8_general_ci;';
+				)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;';
 
 		dbDelta($query);
 		//$wpdb->query( $query );
@@ -61,4 +61,48 @@ if (!function_exists('youpztMessages_define_table')) {
 		}
 }
 add_action( 'init', 'youpztMessages_define_table' );
+//发送订阅请求
+add_action('parse_request', 'go_subscribe', 4);
+if ( ! function_exists( 'go_subscribe' )) :
+function go_subscribe($wp){
+	$data_token=isset($_GET["token"])?$_GET["token"]:false;//绑定token的安全码
+
+	if($data_token=='open_subscribe'){
+		$subscribe_email=isset($_GET['email'])? $_GET['email']:false;
+		$from_url=$_SERVER['HTTP_HOST'];
+		$subscribe_code = array(
+			"from_url"=>$from_url,
+			"email"=>$subscribe_email,
+			"_form_"=>"subscriptionFront"
+		);
+		
+		echo https_post("http://www.youpzt.com?token=get_subscribe",$subscribe_code);
+		exit;
+	}elseif($data_token=='cancel_subscribe'){
+		global $current_user;
+        $user_id = $current_user->ID;
+		/* If user clicks to ignore the notice, add that to their user meta */
+
+		add_user_meta($user_id, 'youpzt-subscribe', 'true', true);
+		
+	}	
+}
+endif;
+	 //通过链接post获取数据
+if ( ! function_exists( 'https_post' ) ) :
+function https_post($url, $data = null){
+	$curl = curl_init();
+	curl_setopt($curl, CURLOPT_URL, $url);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+	if (!empty($data)){
+		curl_setopt($curl, CURLOPT_POST, 1);
+	   curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+	 }
+	 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+	 $output = curl_exec($curl);
+	 curl_close($curl);
+	 return $output;
+ }
+ endif;
 ?>
