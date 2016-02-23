@@ -49,7 +49,7 @@ jQuery( document ).ready( function ( $ )
 //tab选择器
 		// Loads tabbed sections if they exist
 	if ( $('.nav-tab-wrapper').length > 0 ) {
-		options_framework_tabs();
+		//options_framework_tabs();
 	}
 
 	function options_framework_tabs() {
