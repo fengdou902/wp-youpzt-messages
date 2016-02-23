@@ -1,10 +1,10 @@
 <?php
 /**
- * @package Private Messages For WordPress
+ * @package wp-youpzt-messages
  *
- * @author: Rilwis
- * @url: http://www.deluxeblogtips.com
- * @email: rilwis@gmail.com
+ * @author: youpzt
+ * @url: http://www.youpzt.com
+ * @email: 981248356@qq.com
  
  Template Name: 站内信模板
  
@@ -30,25 +30,41 @@ get_header();
  
 .iconfont{font-family:"iconfont";
 font-size:20px;font-style:normal;margin-right:2px;}                   
-	.ypzt-message{padding:25px;}
+	.ypzt-message{padding:20px;width: 60%;margin:40px auto;border: 1px solid #ccc;border-radius: 5px;box-shadow: 2px 2px 2px #dcdcdc;color: #666;}
+	.ypzt-message a{color: #666;}
+	.ypzt-message td{border: none;}
 	.ypzt-message-title a{margin-right: 20px;padding: 10px;border: 1px solid;border-radius:5px;text-decoration: none;color: #6F6F6F}
 	.ypzt-message-title-img{display: inline-block;margin-right: 10px;margin-bottom: 30px;margin-top: 10px;}
 	.ypzt-message-title-img img{width:60px;border-radius:50%;}
 	.ypzt-message-title-img span{margin-left: 20px;font-size: 25px;}
-	.mt-10{margin-top: 10px;}
+	.ypzt-mt-10{margin-top: 10px;}
 	.ypzt-message-content .form-table select{width: 100%;padding:5px;border-radius: 5px;border: 1px solid #ccc;}
 	.ypzt-message-content select{padding:5px;border-radius: 5px;border: 1px solid #ccc;}
-	.ypzt-message-content h2{margin:20px 0;}
+	.ypzt-message-content h2{margin:20px 0;font-size: 20px;}
 	.ypzt-message-content input{border: 1px solid #ccc;border-radius: 4px;margin-top: 10px;margin-bottom: 13px;}
-	.ypzt-message-content td{padding:20px 0 20px 0;}
 	
 	.ypzt-message-content #insert-media-button{margin-right: 15px;}
-	.ypzt-message-border{border-bottom:1px solid #ececec;padding-bottom: 35px;}
+	.ypzt-message-border{border-bottom:1px solid #ececec;padding-bottom: 35px;text-align: center;}
+	.ypzt-message-information{margin-bottom: 30px;}
+	.ypzt-number{font-size: 25px;margin-right: 5px;}
+	.ypzt-message-border h2{border-bottom: 1px solid #ECECEC;margin-top: 0px;padding-bottom: 20px;}
+	.ypzt-message-subject{width: 100%;}
+	.yzpt-content-td{width: 45%;padding-right: 5%}
+	.yzpt-content-td .yzpt-content-td-title{font-size: 16px;font-weight:800;}
+	@media screen and (max-width: 768px) {
+    .ypzt-message{
+       width: 100%
+    }
+}
 </style>
 <div class="hfeed content ypzt-message">
 	<div class="ypzt-message-border">
 	<h2><?php the_title(); ?></h2>
 	<div class="ypzt-message-title-img"><img src="http://img4q.duitang.com/uploads/item/201410/01/20141001113442_mXNBy.jpeg"><span>admin</span></div>
+	<div class="ypzt-message-information">
+		<span>未读消息：<span class="ypzt-number"><a href="javascript:(0)">10</a></span>条</span>
+		<span>您共收到消息：<span class="ypzt-number"><a href="javascript:(0)" onclick="pmSwitch('pm-inbox');">10</a></span>条</span>
+	</div>
 	<div class="ypzt-message-title">
 	<a href="javascript:void(0);" onclick="pmSwitch('pm-send');"><i class="iconfont">&#xe601;</i>发送</a><a href="javascript:void(0);" onclick="pmSwitch('pm-inbox');"><i class="iconfont">&#xe603;</i>收件箱</a><a href="javascript:void(0);" onclick="pmSwitch('pm-outbox');"><i class="iconfont">&#xe604;</i>已发送信息</a>
 	</div>
@@ -69,7 +85,7 @@ font-size:20px;font-style:normal;margin-right:2px;}
 	<script type="text/javascript" src="<?php echo WP_PLUGIN_URL; ?>/wp-youpzt-messages/js/script.js"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo WP_PLUGIN_URL; ?>/wp-youpzt-messages/css/style.css" />
 	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-	<div class="post mt-10 ypzt-message-content" id="post-<?php the_ID(); ?>">
+	<div class="post ypzt-mt-10 ypzt-message-content" id="post-<?php the_ID(); ?>">
 		<?php
 		$show = array(true, false, false);
 		if (isset($_REQUEST['page']) && $_REQUEST['page'] == 'ypm_inbox') {
