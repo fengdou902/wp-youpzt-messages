@@ -46,8 +46,7 @@ function ypzt_messages_showAdminMessages()
 		}
 
 }
-
-	add_action('admin_notices', 'ypzt_messages_showAdminMessages');//后台显示更新信息	
+add_action('admin_notices', 'ypzt_messages_showAdminMessages');//后台显示更新信息	
 
 //获取远程内容
 if ( ! function_exists( 'geturl_content' ) ) :
@@ -90,6 +89,30 @@ if (!function_exists('admin_subscribe')) {
 			wp_enqueue_script( 'youpztajax-subscribe',YPM_JS_URL.'ajax-subscribe.js', array(), YOUPZT_MESSAGES_VERSION);		
 		}
 	}
+}
+
+//注册站内信所需要的页面
+function youpzt_messages_create_pages(){
+    /*$config_store_pages=array(
+            'cart'=>'购物车',
+            'checkout'=>'结算',
+            'my-account'=>'我的账户',
+            'my-address'=>'我的地址',
+            'shop'=>'商店'
+        );*/
+    $config_store_pages=array(
+            'youpzt-messages'=>'站内信',
+        );
+    foreach ($config_store_pages as $key => $store_page_val) {
+        $register_page = array(
+             'post_title' => $store_page_val,
+             'post_name'=>$key,
+             'post_type' => 'page',
+             'post_status' => 'publish',
+             'post_author' => 1
+          );
+        wp_insert_post($register_page);
+    }
 }
 
 ?>

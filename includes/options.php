@@ -44,7 +44,7 @@ function youpzt_messages_add_menu()
 	// Send page
 	$send_page = add_submenu_page( 'youpzt_messages_inbox', __( '发送站内信', 'youpzt' ), __( '发送', 'youpzt' ), 'read', 'youpzt_messages_send', 'youpzt_messages_send' );
 
-		$option_page = add_submenu_page('youpzt_messages_inbox',__( '站内信设置', 'youpzt' ), __( '设置', 'youpzt' ), 'manage_options', 'youpzt_messages_option', 'youpzt_messages_option_page' );
+		$option_page = add_submenu_page('youpzt_messages_inbox',__( '站内信设置', 'youpzt' ), __( '设置安装', 'youpzt' ), 'manage_options', 'youpzt_messages_option', 'youpzt_messages_option_page' );
 }
 
 /**
@@ -207,26 +207,37 @@ function youpzt_messages_option_page() {
 			<p class="submit">
 				<input type="submit" name="submit" class="button-primary" value="<?php _e( '保存修改', 'youpzt' ) ?>"/>
 			</p>
-
-		</form>
-
+</form>
 	</div>
 	<div class="about_youpzt fr oh">
 		<h3><?php _e( '微信公众号', 'youpzt' ); ?></h3>
-		<p>关注我们，微信扫一扫</p>
+
 		<a href="http://www.youpzt.com/" target="_blank"><img src="<?php echo YPM_IMG_URL.'youdi_qrcode05.jpg';?>" /></a>
-		<p>官方QQ群：123456</p>
+		<h3>官方QQ群</h3>
+		<p><a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=dbf65e2fe706d4a5f798fb98158587c450c30d8df8444fcfe1409c537c828e0b"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="WordPress优品主题" title="WordPress优品主题" style="width:auto;"></a></p>
+		<p><img border="0" src="<?php echo YPM_IMG_URL.'youpzt_qq_group_qrcode01.png';?>" alt="WordPress优品主题" title="WordPress优品主题" style="width:100%;"></p>
 	</div>
-	<div id="options-group-2" style="">
+	<div id="options-group-2" class="group " style="">
+	<form action="<?php echo get_admin_url();?>admin.php?page=youpzt_messages_option" method="get">
 		<?php 
+		$message_action=isset($_GET['init_youpzt_messages_plugin'])? $_GET['init_youpzt_messages_plugin']:false;
+		if ($message_action==1) {
+			youpzt_messages_create_pages();
+			youpzt_messages_activate();
+		}
 		echo '<div class="updated-no">',
-		'<p><strong>', __( '1、本插件带有一个用作前台使用的页面模板。', 'youpzt' ), '</strong></p>',
+		'<p><strong>', __( '1、关于前台使用的站内信页面模板。', 'youpzt' ), '</strong></p>',
 		'<p>', __( '复制文件 <code>youpztMessages-template.php </code>到您的主题文件夹，使用叫做 <code>消息模板</code> 的模板创建页面。', 'youpzt' ), '</p>',
 		'<p>', __( '这个模板只有基本结构。您应该修改它以让它和您的主题相协调。', 'youpzt' ), '</p>',
-		'<p></p><p><strong>', __( '2、现在您能够把站内信同时发送给多个收件人。', 'youpzt' ), '</strong></p>',
+		'<p></p><p><strong>', __( '2、当站内信插件不能在你的网站正常使用时，请点击下面"初始化"', 'youpzt' ), '</strong></p>',
 		'</div>';
 			?>
+			<p class="submit">
+				<button type="submit" name="init_youpzt_messages_plugin" class="button-primary" value="1"/><?php _e( '初始化插件', 'youpzt' ) ?></button>
+			</p>
+				</form>
 	</div>
+
 	</div>
 </div>
 
