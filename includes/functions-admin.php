@@ -29,7 +29,7 @@ function check_youpzt_plugins_messages(){
 	return $check_obj;
 }
 //check update version 
-function ypzt_optimize_showAdminMessages()
+function ypzt_messages_showAdminMessages()
 {
 	 $check_obj=check_youpzt_plugins_messages();
 	 $check_version=$check_obj->version;
@@ -47,7 +47,7 @@ function ypzt_optimize_showAdminMessages()
 
 }
 
-	add_action('admin_notices', 'ypzt_optimize_showAdminMessages');//后台显示更新信息	
+	add_action('admin_notices', 'ypzt_messages_showAdminMessages');//后台显示更新信息	
 
 //获取远程内容
 if ( ! function_exists( 'geturl_content' ) ) :
