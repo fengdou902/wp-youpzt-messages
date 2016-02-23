@@ -18,9 +18,41 @@ if (!is_user_logged_in()) {
 
 get_header();
 ?>
-<div class="hfeed content">
+<style type="text/css">
+	@font-face {
+  font-family: 'iconfont';
+  src: url('//at.alicdn.com/t/font_1456106752_3732517.eot'); /* IE9*/
+  src: url('//at.alicdn.com/t/font_1456106752_3732517.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('//at.alicdn.com/t/font_1456106752_3732517.woff') format('woff'), /* chrome、firefox */
+  url('//at.alicdn.com/t/font_1456106752_3732517.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('//at.alicdn.com/t/font_1456106752_3732517.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+ 
+.iconfont{font-family:"iconfont";
+font-size:20px;font-style:normal;margin-right:2px;}                   
+	.ypzt-message{padding:25px;}
+	.ypzt-message-title a{margin-right: 20px;padding: 10px;border: 1px solid;border-radius:5px;text-decoration: none;color: #6F6F6F}
+	.ypzt-message-title-img{display: inline-block;margin-right: 10px;margin-bottom: 30px;margin-top: 10px;}
+	.ypzt-message-title-img img{width:60px;border-radius:50%;}
+	.ypzt-message-title-img span{margin-left: 20px;font-size: 25px;}
+	.mt-10{margin-top: 10px;}
+	.ypzt-message-content .form-table select{width: 100%;padding:5px;border-radius: 5px;border: 1px solid #ccc;}
+	.ypzt-message-content select{padding:5px;border-radius: 5px;border: 1px solid #ccc;}
+	.ypzt-message-content h2{margin:20px 0;}
+	.ypzt-message-content input{border: 1px solid #ccc;border-radius: 4px;margin-top: 10px;margin-bottom: 13px;}
+	.ypzt-message-content td{padding:20px 0 20px 0;}
+	
+	.ypzt-message-content #insert-media-button{margin-right: 15px;}
+	.ypzt-message-border{border-bottom:1px solid #ececec;padding-bottom: 35px;}
+</style>
+<div class="hfeed content ypzt-message">
+	<div class="ypzt-message-border">
 	<h2><?php the_title(); ?></h2>
-	<a href="javascript:void(0);" onclick="pmSwitch('pm-send');">发送</a> | <a href="javascript:void(0);" onclick="pmSwitch('pm-inbox');">收件箱</a> | <a href="javascript:void(0);" onclick="pmSwitch('pm-outbox');">已发送信息</a>
+	<div class="ypzt-message-title-img"><img src="http://img4q.duitang.com/uploads/item/201410/01/20141001113442_mXNBy.jpeg"><span>admin</span></div>
+	<div class="ypzt-message-title">
+	<a href="javascript:void(0);" onclick="pmSwitch('pm-send');"><i class="iconfont">&#xe601;</i>发送</a><a href="javascript:void(0);" onclick="pmSwitch('pm-inbox');"><i class="iconfont">&#xe603;</i>收件箱</a><a href="javascript:void(0);" onclick="pmSwitch('pm-outbox');"><i class="iconfont">&#xe604;</i>已发送信息</a>
+	</div>
+	</div>
 	<script type="text/javascript">
 		// Switch between send page, inbox and outbox
 		function pmSwitch(page) {
@@ -37,7 +69,7 @@ get_header();
 	<script type="text/javascript" src="<?php echo WP_PLUGIN_URL; ?>/wp-youpzt-messages/js/script.js"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo WP_PLUGIN_URL; ?>/wp-youpzt-messages/css/style.css" />
 	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-	<div class="post" id="post-<?php the_ID(); ?>">
+	<div class="post mt-10 ypzt-message-content" id="post-<?php the_ID(); ?>">
 		<?php
 		$show = array(true, false, false);
 		if (isset($_REQUEST['page']) && $_REQUEST['page'] == 'ypm_inbox') {

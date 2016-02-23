@@ -73,11 +73,11 @@ function youpzt_messages_admin_print_styles_outbox()
  */
 function youpzt_messages_admin_print_styles_all()
 {
-	$optimize_get = isset($_GET['page']) ? $_GET['page'] : '';
+	$optimize_get = isset($_GET['page']) ? $_GET['page']:'';
 	//if(strpos($optimize_get,'youpzt_messages')===true){
     //wp_enqueue_style( 'jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css' );
 		wp_enqueue_style( 'youpzt_base', YPM_CSS_URL . 'youpzt-base.css' );
-		wp_enqueue_style( 'youpzt_messages_css', YPM_CSS_URL . 'style.css' );
+		wp_enqueue_style( 'youpzt_messages_css', YPM_CSS_URL . 'admin-style.css' );
 		wp_enqueue_script( 'youpzt_messages_js', YPM_JS_URL . 'script.js', array( 'jquery-ui-autocomplete' ) );
 	//}
 }
@@ -218,7 +218,7 @@ function youpzt_messages_option_page() {
 		<p><img border="0" src="<?php echo YPM_IMG_URL.'youpzt_qq_group_qrcode01.png';?>" alt="WordPress优品主题" title="WordPress优品主题" style="width:100%;"></p>
 	</div>
 	<div id="options-group-2" class="group " style="">
-	<form action="<?php echo get_admin_url();?>admin.php?page=youpzt_messages_option" method="get">
+	<form action="<?php echo get_admin_url();?>admin.php" method="get">
 		<?php 
 		$message_action=isset($_GET['init_youpzt_messages_plugin'])? $_GET['init_youpzt_messages_plugin']:false;
 		if ($message_action==1) {
@@ -226,12 +226,13 @@ function youpzt_messages_option_page() {
 			youpzt_messages_activate();
 		}
 		echo '<div class="updated-no">',
-		'<p><strong>', __( '1、关于前台使用的站内信页面模板。', 'youpzt' ), '</strong></p>',
-		'<p>', __( '复制文件 <code>youpztMessages-template.php </code>到您的主题文件夹，使用叫做 <code>消息模板</code> 的模板创建页面。', 'youpzt' ), '</p>',
-		'<p>', __( '这个模板只有基本结构。您应该修改它以让它和您的主题相协调。', 'youpzt' ), '</p>',
-		'<p></p><p><strong>', __( '2、当站内信插件不能在你的网站正常使用时，请点击下面"初始化"', 'youpzt' ), '</strong></p>',
-		'</div>';
+				'<p><strong>', __( '1、关于前台使用的站内信页面模板。', 'youpzt' ), '</strong></p>',
+				'<p>', __( '复制文件 <code>youpztMessages-template.php </code>到您的主题文件夹，使用叫做 <code>消息模板</code> 的模板创建页面。', 'youpzt' ), '</p>',
+				'<p>', __( '这个模板只有基本结构。您应该修改它以让它和您的主题相协调。', 'youpzt' ), '</p>',
+				'<p></p><p><strong>', __( '2、当站内信插件不能在你的网站正常使用时，请点击下面"初始化"', 'youpzt' ), '</strong></p>',
+				'</div>';
 			?>
+			<input type="hidden" name="page" value="youpzt_messages_option">
 			<p class="submit">
 				<button type="submit" name="init_youpzt_messages_plugin" class="button-primary" value="1"/><?php _e( '初始化插件', 'youpzt' ) ?></button>
 			</p>

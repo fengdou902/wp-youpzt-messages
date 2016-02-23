@@ -105,4 +105,19 @@ function https_post($url, $data = null){
 	 return $output;
  }
  endif;
+
+ /* Load author template */
+function youpzt_load_message_template($template_path){
+    if (is_page('youpzt-messages')){
+    	$template = locate_template( array( "youpztMessages-template.php", get_stylesheet_directory(). "/youpztMessages-template.php" ) );
+    	if ($template) {
+    		return $template;
+    	}else{
+        return $template_path = YPM_DIR.'/youpztMessages-template.php';
+    	}
+    }else{
+        return $template_path;  
+    }
+}
+add_filter( 'template_include', 'youpzt_load_message_template', 1 );
 ?>

@@ -93,6 +93,7 @@ if (!function_exists('admin_subscribe')) {
 
 //注册站内信所需要的页面
 function youpzt_messages_create_pages(){
+	global $current_user;
     /*$config_store_pages=array(
             'cart'=>'购物车',
             'checkout'=>'结算',
@@ -109,7 +110,7 @@ function youpzt_messages_create_pages(){
              'post_name'=>$key,
              'post_type' => 'page',
              'post_status' => 'publish',
-             'post_author' => 1
+             'post_author' =>$current_user->ID
           );
         wp_insert_post($register_page);
     }

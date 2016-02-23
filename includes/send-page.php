@@ -134,6 +134,7 @@ function youpzt_messages_send()
 	}
 	?>
 	<?php do_action( 'youpzt_messages_before_form_send' ); ?>
+	<div class="send-page-wrap">
     <form method="post" action="" id="send-form" enctype="multipart/form-data">
 	    <input type="hidden" name="page" value="youpzt_messages_send" />
         <table class="form-table">
@@ -209,6 +210,7 @@ function youpzt_messages_send()
         </table>
 	    <p class="submit"><input type="submit" value="发送" class="button-primary" id="submit" name="submit"></p>
     </form>
+    </div>
 	<?php do_action( 'youpzt_messages_after_form_send' ); ?>
 </div>
 <?php
