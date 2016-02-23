@@ -1,9 +1,12 @@
-.form-table td {
+#options-group-1 .form-table td {
 	width:65%;
 }
 .form-table select {
 	height: auto;
 	width: 99%;
 }
+.send-page-wrap{width:70%;}
+.send-page-wrap .form-table th{width: 160px;}
+
 .about_youpzt{width:200px;border:1px solid #ccc;padding:10px}
 .about_youpzt img{width: 100%;}

@@ -28,6 +28,7 @@ include_once YPM_INC_DIR . 'widget.php';
 include_once YPM_INC_DIR . 'inbox-page.php';
 include_once YPM_INC_DIR . 'send-page.php';
 include_once YPM_INC_DIR . 'outbox-page.php';
+include_once YPM_INC_DIR . 'manage-messages.php';
 
 if ( is_admin() )
 {

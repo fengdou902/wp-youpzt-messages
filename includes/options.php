@@ -43,8 +43,10 @@ function youpzt_messages_add_menu()
 
 	// Send page
 	$send_page = add_submenu_page( 'youpzt_messages_inbox', __( '发送站内信', 'youpzt' ), __( '发送', 'youpzt' ), 'read', 'youpzt_messages_send', 'youpzt_messages_send' );
-
-		$option_page = add_submenu_page('youpzt_messages_inbox',__( '站内信设置', 'youpzt' ), __( '设置安装', 'youpzt' ), 'manage_options', 'youpzt_messages_option', 'youpzt_messages_option_page' );
+	//站内信全部管理
+	$manage_message_page = add_submenu_page( 'youpzt_messages_inbox', __( '站内信管理', 'youpzt' ), __( '站内信管理', 'youpzt' ), 'administrator', 'youpzt_messages_manage', 'youpzt_messages_manage' );
+	
+	$option_page = add_submenu_page('youpzt_messages_inbox',__( '站内信设置', 'youpzt' ), __( '设置安装', 'youpzt' ), 'manage_options', 'youpzt_messages_option', 'youpzt_messages_option_page' );
 }
 
 /**

@@ -128,7 +128,7 @@ function youpzt_messages_outbox()
                     <tr>
                         <th class="check-column"><input type="checkbox" name="id[]" value="<?php echo $msg->id; ?>"/>
                         </th>
-                        <td><a href=""><?php echo get_avatar($msg->to_user,32);echo $recipient_name; ?></a></td>
+                        <td><a href="#"><?php echo get_avatar($msg->to_user,32);echo $recipient_name; ?></a></td>
                         <td>
                             <?php
                             echo '<a href="', wp_nonce_url("?page=youpzt_messages_outbox&action=view&id=$msg->id", 'ypm-view_outbox_msg_' . $msg->id), '">', stripcslashes($msg->subject), '</a>';
@@ -153,7 +153,7 @@ function youpzt_messages_outbox()
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th class="manage-column check-column"><input type="checkbox"/></th>
+                    <td class="manage-column check-column"><input type="checkbox"/></td>
                     <th class="manage-column"><?php _e('接收者', 'youpzt'); ?></th>
                     <th class="manage-column"><?php _e('主题', 'youpzt'); ?></th>
                     <th class="manage-column"><?php _e('对方已阅读', 'youpzt'); ?></th>

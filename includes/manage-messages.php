@@ -1,8 +1,8 @@
 <?php
 /**
- * Inbox page
+ * manage-messages page
  */
-function youpzt_messages_inbox()
+function youpzt_messages_manage()
 {
 	global $wpdb, $current_user;
 
@@ -22,9 +22,9 @@ function youpzt_messages_inbox()
 		//$msg->sender = $wpdb->get_var( "SELECT display_name FROM $wpdb->users WHERE user_login = '$msg->from_user'" );
 		?>
 	<div class="wrap">
-		<h2><?php _e( '收件箱', 'youpzt' ); ?></h2>
+		<h2><?php _e( '站内信管理', 'youpzt' ); ?></h2>
 
-		<p><a href="?page=youpzt_messages_inbox"><?php _e( '返回收件箱', 'youpzt' ); ?></a></p>
+		<p><a href="?page=youpzt_messages_manage"><?php _e( '返回', 'youpzt' ); ?></a></p>
 		<table class="widefat fixed" cellspacing="0">
 			<thead>
 			<tr>
@@ -40,12 +40,12 @@ function youpzt_messages_inbox()
 				<td>
 						<span class="delete">
 							<a class="delete"
-								href="<?php echo wp_nonce_url( "?page=youpzt_messages_inbox&action=delete&id=$msg->id", 'ypm-delete_inbox_msg_' . $msg->id ); ?>"><?php _e( '删除', 'youpzt' ); ?></a>
+								href="<?php echo wp_nonce_url("?page=youpzt_messages_manage&action=delete&id=$msg->id", 'ypm-delete_inbox_msg_' . $msg->id ); ?>"><?php _e( '删除', 'youpzt' ); ?></a>
 						</span>
-						<span class="reply">
+						<!--<span class="reply">
 							| <a class="reply"
-							href="<?php echo wp_nonce_url( "?page=youpzt_messages_send&recipient=$sender_name&id=$msg->id&subject=Re: " . stripcslashes( $msg->subject ), 'ypm-reply_inbox_msg_' . $msg->id ); ?>"><?php _e( '回复', 'youpzt' ); ?></a>
-						</span>
+							href="<?php //echo wp_nonce_url( "?page=youpzt_messages_send&recipient=$sender_name&id=$msg->id&subject=Re: " . stripcslashes( $msg->subject ), 'ypm-reply_inbox_msg_' . $msg->id ); ?>"><?php _e( '回复', 'youpzt' ); ?></a>
+						</span>-->
 				</td>
 			</tr>
 			</tbody>
@@ -72,9 +72,7 @@ function youpzt_messages_inbox()
 		{
 			check_admin_referer( "ypm-mar_inbox_msg_$id" );
 			$id = array( $id );
-		}
-		else
-		{
+		}else{
 			check_admin_referer( "ypm-bulk-action_inbox" );
 		}
 		$n = count( $id );
@@ -132,12 +130,12 @@ function youpzt_messages_inbox()
 	}
 
 	// show all messages which have not been deleted by this user (deleted status != 2)
-	$msgs = $wpdb->get_results( 'SELECT `id`, `from_user`, `subject`, `read`, `date` FROM ' . $wpdb->youpzt_messages.' WHERE `to_user` = "' . $current_user->ID . '" AND `deleted` != "2" ORDER BY `date` DESC' );
+	$msgs = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `deleted` != "2" ORDER BY `date` DESC' );
 	?>
 <div class="wrap">
-	<h2><?php _e( '收件箱', 'youpzt' ); ?><a href="<?php echo admin_url().'admin.php?page=youpzt_messages_send';?>" class="page-title-action">发送</a></h2>
+	<h2><?php _e( '站内信管理', 'youpzt' ); ?><a href="<?php echo admin_url().'admin.php?page=youpzt_messages_send';?>" class="page-title-action">发送</a></h2>
 	<?php
-	if ( !empty( $status ) )
+	if ( !empty( $status))
 	{
 		echo '<div id="message" class="updated fade"><p>', $status, '</p></div>';
 	}
@@ -154,11 +152,11 @@ function youpzt_messages_inbox()
 				$num_unread++;
 			}
 		}
-		echo '<p>', sprintf( _n( '您有 %d 条站内信 （%d 条未读）.', '您有 %d 条站内信 （%d 条未读）.', $n, 'youpzt' ), $n, $num_unread ), '</p>';
+		echo '<p>', sprintf( _n( '网站共有 %d 条站内信 （%d 条未读）.', '有 %d 条站内信 （%d 条未读）.', $n, 'youpzt' ), $n, $num_unread ), '</p>';
 		?>
 		<form action="" method="get">
 			<?php wp_nonce_field( 'ypm-bulk-action_inbox' ); ?>
-			<input type="hidden" name="page" value="youpzt_messages_inbox" />
+			<input type="hidden" name="page" value="youpzt_messages_manage" />
 
 			<div class="tablenav">
 				<select name="action">
@@ -173,6 +171,7 @@ function youpzt_messages_inbox()
 				<tr>
 					<td class="manage-column check-column"><input type="checkbox" /></td>
 					<th class="manage-column" width="10%"><?php _e( '发件人', 'youpzt' ); ?></th>
+					<th class="manage-column"><?php _e( '收件人', 'youpzt' ); ?></th>
 					<th class="manage-column"><?php _e( '主题', 'youpzt' ); ?></th>
 					<th class="manage-column"><?php _e( '状态', 'youpzt' ); ?></th>
 					<th class="manage-column" width="20%"><?php _e( '日期', 'youpzt' ); ?></th>
@@ -184,41 +183,40 @@ function youpzt_messages_inbox()
 					{
 						//$msg->sender = $wpdb->get_var( "SELECT display_name FROM $wpdb->users WHERE user_login = '$msg->sender'" );
 						$sender_name=get_userdata($msg->from_user)->display_name;
+						$receipt_name=get_userdata($msg->to_user)->display_name;
 						?>
 					<tr>
 						<th class="check-column"><input type="checkbox" name="id[]" value="<?php echo $msg->id; ?>" />
 						</th>
 						<td><a href="#"><?php echo get_avatar($msg->from_user,32);echo $sender_name; ?></a></td>
+						<td><a href="#"><?php echo get_avatar($msg->to_user,32);echo $receipt_name; ?></a></td>
 						<td>
 							<?php
 							if ( $msg->read ){
-								echo '<a href="', wp_nonce_url( "?page=youpzt_messages_inbox&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ), '">', stripcslashes( $msg->subject ), '</a>';
+								echo '<a href="', wp_nonce_url( "?page=youpzt_messages_manage&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ), '">', stripcslashes( $msg->subject ), '</a>';
 							}else{
-								echo '<a href="', wp_nonce_url( "?page=youpzt_messages_inbox&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ), '"><b>', stripcslashes( $msg->subject ), '</b></a>';
+								echo '<a href="', wp_nonce_url( "?page=youpzt_messages_manage&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ), '"><b>', stripcslashes( $msg->subject ), '</b></a>';
 							}
 							?>
 							<div class="row-actions">
 							<span>
-								<a href="<?php echo wp_nonce_url( "?page=youpzt_messages_inbox&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ); ?>"><?php _e( '查看', 'youpzt' ); ?></a>
+								<a href="<?php echo wp_nonce_url( "?page=youpzt_messages_manage&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ); ?>"><?php _e( '查看', 'youpzt' ); ?></a>
 							</span>
 								<?php
 								if ( !( $msg->read ) )
 								{
 									?>
 									<span>
-								| <a href="<?php echo wp_nonce_url( "?page=youpzt_messages_inbox&action=mar&id=$msg->id", 'ypm-mar_inbox_msg_' . $msg->id ); ?>"><?php _e( '标记为已读', 'youpzt' ); ?></a>
+								| <a href="<?php echo wp_nonce_url( "?page=youpzt_messages_manage&action=mar&id=$msg->id", 'ypm-mar_inbox_msg_' . $msg->id ); ?>"><?php _e( '标记为已读', 'youpzt' ); ?></a>
 							</span>
 									<?php
 								}
 								?>
 								<span class="delete">
 								| <a class="delete"
-									href="<?php echo wp_nonce_url( "?page=youpzt_messages_inbox&action=delete&id=$msg->id", 'ypm-delete_inbox_msg_' . $msg->id ); ?>"><?php _e( '删除', 'youpzt' ); ?></a>
+									href="<?php echo wp_nonce_url( "?page=youpzt_messages_manage&action=delete&id=$msg->id", 'ypm-delete_inbox_msg_' . $msg->id ); ?>"><?php _e( '删除', 'youpzt' ); ?></a>
 							</span>
-							<span class="reply">
-								| <a class="reply"
-								href="<?php echo wp_nonce_url( "?page=youpzt_messages_send&recipient=$sender_name&id=$msg->id&subject=Re: " . stripcslashes( $msg->subject ), 'ypm-reply_inbox_msg_' . $msg->id ); ?>"><?php _e( '回复', 'youpzt' ); ?></a>
-							</span>
+
 							</div>
 						</td>
 						<td><?php if ($msg->read==1) {echo '已读';}elseif($msg->read==0){echo '<span class="noread" style="color:#10b68c;">未读？</span>';}else{echo '未知';};?></td>
@@ -233,6 +231,7 @@ function youpzt_messages_inbox()
 				<tr>
 					<td class="manage-column check-column"><input type="checkbox" /></td>
 					<th class="manage-column"><?php _e( '发件人', 'youpzt' ); ?></th>
+					<th class="manage-column"><?php _e( '收件人', 'youpzt' ); ?></th>
 					<th class="manage-column"><?php _e( '主题', 'youpzt' ); ?></th>
 					<th class="manage-column"><?php _e( '状态', 'youpzt' ); ?></th>
 					<th class="manage-column"><?php _e( '日期', 'youpzt' ); ?></th>
@@ -241,7 +240,6 @@ function youpzt_messages_inbox()
 			</table>
 		</form>
 		<?php
-
 	}
 	?>
 </div>
