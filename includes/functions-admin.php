@@ -10,10 +10,6 @@ function menu_youpzt_message_update(){
   
 }
 add_action( 'admin_head','menu_youpzt_message_update');
-//获取后台url
-function get_optmenupage_url($pageslug){
-	return site_url('/wp-admin/admin.php?page=optimize_page&tab='.$pageslug);
-}
 //提示信息
 function youpzt_messages_showMessage($message, $errormsg = false)
 {

@@ -27,7 +27,7 @@ jQuery( document ).ready( function ( $ )
 		source: function ( request, response )
 		{
 			var data = {
-				action: 'rwpm_get_users',
+				action: 'ypm_get_users',
 				term  : extract_last( request.term )
 			};
 			$.post( ajaxurl, data, function ( r )
@@ -46,7 +46,7 @@ jQuery( document ).ready( function ( $ )
 		}
 	} );
 
-
+//tab选择器
 		// Loads tabbed sections if they exist
 	if ( $('.nav-tab-wrapper').length > 0 ) {
 		options_framework_tabs();

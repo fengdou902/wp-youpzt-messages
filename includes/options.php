@@ -30,7 +30,7 @@ function youpzt_messages_add_menu()
 	// Option page
 
 	// Add Private Messages Menu
-	$icon_url = YPM_IMG_URL . 'icon.png';
+	$icon_url = YPM_IMG_URL . 'msgBox_icon.gif';
 	add_menu_page( __( '站内信', 'youpzt' ), __( '站内信', 'youpzt' ) . "<span class='update-plugins count-$num_unread'><span class='plugin-count'>$num_unread</span></span>", 'read', 'youpzt_messages_inbox', 'youpzt_messages_inbox', $icon_url );
 
 	// 收件箱 page
@@ -91,7 +91,7 @@ function youpzt_messages_option_page() {
 <div class="wrap wpbody-content">
 	<h2><?php _e( '站内信设置', 'youpzt' ); ?></h2>
 <h2 class="nav-tab-wrapper">
-	<a href="#options-group-1" id="options-group-1-tab" class="nav-tab nav-tab-active">基本设置</a>
+	<a href="#options-group-1" id="options-group-1-tab" class="nav-tab">基本设置</a>
 	<a href="#options-group-2" id="options-group-2-tab" class="nav-tab">安装指南</a>
 </h2>
 
@@ -217,7 +217,7 @@ function youpzt_messages_option_page() {
 		<a href="http://www.youpzt.com/" target="_blank"><img src="<?php echo YPM_IMG_URL.'youdi_qrcode05.jpg';?>" /></a>
 		<p>官方QQ群：123456</p>
 	</div>
-	<div id="options-group-2" style="display:none;">
+	<div id="options-group-2" style="">
 		<?php 
 		echo '<div class="updated-no">',
 		'<p><strong>', __( '1、本插件带有一个用作前台使用的页面模板。', 'youpzt' ), '</strong></p>',
