@@ -188,8 +188,13 @@ function youpzt_messages_inbox()
 					<tr>
 						<th class="check-column"><input type="checkbox" name="id[]" value="<?php echo $msg->id; ?>" />
 						</th>
+<<<<<<< HEAD
 						<td><a href="#"><?php echo get_avatar($msg->from_user,32);echo $sender_name; ?></a></td>
 						<td>
+=======
+						<td><?php echo $sender_name; ?></td>
+						<td class="yzpt-content-td">
+>>>>>>> change-style
 							<?php
 							if ( $msg->read ){
 								echo '<a href="', wp_nonce_url( "?page=youpzt_messages_inbox&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ), '">', stripcslashes( $msg->subject ), '</a>';

@@ -128,10 +128,15 @@ function youpzt_messages_outbox()
                     <tr>
                         <th class="check-column"><input type="checkbox" name="id[]" value="<?php echo $msg->id; ?>"/>
                         </th>
+<<<<<<< HEAD
                         <td><a href="#"><?php echo get_avatar($msg->to_user,32);echo $recipient_name; ?></a></td>
                         <td>
+=======
+                        <td><a href=""><?php echo get_avatar($msg->to_user,32);echo $recipient_name; ?></a></td>
+                        <td class="yzpt-content-td">
+>>>>>>> change-style
                             <?php
-                            echo '<a href="', wp_nonce_url("?page=youpzt_messages_outbox&action=view&id=$msg->id", 'ypm-view_outbox_msg_' . $msg->id), '">', stripcslashes($msg->subject), '</a>';
+                            echo '<a class="yzpt-content-td-title" href="', wp_nonce_url("?page=youpzt_messages_outbox&action=view&id=$msg->id", 'ypm-view_outbox_msg_' . $msg->id), '">', stripcslashes($msg->subject), '</a>';
                             ?>
                             <div class="row-actions">
 							<span>
