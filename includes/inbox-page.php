@@ -27,16 +27,16 @@ function youpzt_messages_inbox()
 		<p><a href="?page=youpzt_messages_inbox"><?php _e( '返回收件箱', 'youpzt' ); ?></a></p>
 		<table class="widefat fixed" cellspacing="0">
 			<thead>
-			<tr>
-				<th class="manage-column" width="20%"><?php _e( '资讯', 'youpzt' ); ?></th>
-				<th class="manage-column"><?php _e( '信息', 'youpzt' ); ?></th>
-				<th class="manage-column" width="15%"><?php _e( '动作', 'youpzt' ); ?></th>
-			</tr>
+				<tr>
+					<th class="manage-column" width="20%"><?php _e( '资讯', 'youpzt' ); ?></th>
+					<th class="manage-column"><?php _e( '信息', 'youpzt' ); ?></th>
+					<th class="manage-column" width="15%"><?php _e( '动作', 'youpzt' ); ?></th>
+				</tr>
 			</thead>
 			<tbody>
 			<tr>
 				<td><?php printf( __( '<b>发件人</b>: %s<br /><b>时间</b>: %s', 'youpzt' ), $sender_name, $msg->date ); ?></td>
-				<td><?php printf( __( '<p><b>主题</b>: %s</p><p>%s</p>', 'youpzt' ), stripcslashes( $msg->subject ) , nl2br( stripcslashes( $msg->content ) ) ); ?></td>
+				<td><?php printf( __( '<p><b>主题</b>: %s</p><p>%s</p>', 'youpzt' ), stripcslashes( $msg->subject ) , nl2br(stripcslashes($msg->content))); ?></td>
 				<td>
 						<span class="delete">
 							<a class="delete"
@@ -96,9 +96,7 @@ function youpzt_messages_inbox()
 		{
 			check_admin_referer( "ypm-delete_inbox_msg_$id" );
 			$id = array( $id );
-		}
-		else
-		{
+		}else{
 			check_admin_referer( "ypm-bulk-action_inbox" );
 		}
 
@@ -137,12 +135,10 @@ function youpzt_messages_inbox()
 <div class="wrap">
 	<h2><?php _e( '收件箱', 'youpzt' ); ?><a href="<?php echo admin_url().'admin.php?page=youpzt_messages_send';?>" class="page-title-action">发送</a></h2>
 	<?php
-	if ( !empty( $status ) )
-	{
-		echo '<div id="message" class="updated fade"><p>', $status, '</p></div>';
+	if (!empty( $status)){
+		echo '<div id="message" class="updated fade"><p>',$status,'</p></div>';
 	}
-	if ( empty( $msgs ) )
-	{
+	if ( empty($msgs)){
 		echo '<p>', __( '收件箱中没有信息。', 'youpzt' ), '</p>';
 	}else{
 		$n = count( $msgs );
@@ -170,13 +166,13 @@ function youpzt_messages_inbox()
 
 			<table class="wp-list-table widefat fixed striped messages" cellspacing="0">
 				<thead>
-				<tr>
-					<td class="manage-column check-column"><input type="checkbox" /></td>
-					<th class="manage-column" width="10%"><?php _e( '发件人', 'youpzt' ); ?></th>
-					<th class="manage-column"><?php _e( '主题', 'youpzt' ); ?></th>
-					<th class="manage-column"><?php _e( '状态', 'youpzt' ); ?></th>
-					<th class="manage-column" width="20%"><?php _e( '日期', 'youpzt' ); ?></th>
-				</tr>
+					<tr>
+						<td class="manage-column check-column"><input type="checkbox" /></td>
+						<th class="manage-column" width="10%"><?php _e( '发件人', 'youpzt' );?></th>
+						<th class="manage-column"><?php _e( '主题', 'youpzt' ); ?></th>
+						<th class="manage-column"><?php _e( '状态', 'youpzt' ); ?></th>
+						<th class="manage-column" width="20%"><?php _e( '日期', 'youpzt' ); ?></th>
+					</tr>
 				</thead>
 				<tbody>
 					<?php
@@ -190,9 +186,7 @@ function youpzt_messages_inbox()
 						</th>
 						
 						<td><a href="#"><?php echo get_avatar($msg->from_user,32);echo $sender_name; ?></a></td>
-						<td>
 						
-						<td><?php echo $sender_name; ?></td>
 						<td class="yzpt-content-td">
 						
 							<?php
@@ -207,7 +201,7 @@ function youpzt_messages_inbox()
 								<a href="<?php echo wp_nonce_url( "?page=youpzt_messages_inbox&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ); ?>"><?php _e( '查看', 'youpzt' ); ?></a>
 							</span>
 								<?php
-								if ( !( $msg->read ) )
+								if ( !($msg->read))
 								{
 									?>
 									<span>

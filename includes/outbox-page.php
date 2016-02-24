@@ -93,10 +93,10 @@ function youpzt_messages_outbox()
 <div class="wrap">
     <h2><?php _e('已发信息', 'youpzt'); ?><a href="<?php echo admin_url().'admin.php?page=youpzt_messages_send';?>" class="page-title-action">发送</a></h2>
     <?php
-    if (!empty($status)) {
+    if (!empty($status)){
         echo '<div id="message" class="updated fade"><p>', $status, '</p></div>';
     }
-    if (empty($msgs)) {
+    if (empty($msgs)){
         echo '<p>', __('没有已发信息。', 'youpzt'), '</p>';
     } else {
         $n = count($msgs);
@@ -128,9 +128,6 @@ function youpzt_messages_outbox()
                     <tr>
                         <th class="check-column"><input type="checkbox" name="id[]" value="<?php echo $msg->id; ?>"/>
                         </th>
-                            
-                            <td><a href="#"><?php echo get_avatar($msg->to_user,32);echo $recipient_name; ?></a></td>
-                            <td>
                             
                             <td><a href=""><?php echo get_avatar($msg->to_user,32);echo $recipient_name; ?></a></td>
                             <td class="yzpt-content-td">
