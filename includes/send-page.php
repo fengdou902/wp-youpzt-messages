@@ -10,7 +10,7 @@ function youpzt_messages_send()
     <h2>发送站内信</h2>
 	<?php
 	$option = get_option( 'youpzt_messages_option' );
-	if ( $_REQUEST['page'] == 'youpzt_messages_send' && isset( $_POST['submit'] ) )
+	if ($_REQUEST['page'] == 'youpzt_messages_send' && isset( $_POST['submit'] ) )
 	{
 		$error = false;
 		$status = array();
@@ -78,7 +78,7 @@ function youpzt_messages_send()
 							'deleted'   => 0
 				);
 				// insert into database
-				if ( $wpdb->insert( $wpdb->youpzt_messages, $new_message, array( '%d','%d','%d', '%d', '%s', '%s', '%s', '%d', '%d' ) ) ){
+				if ( $wpdb->insert($wpdb->youpzt_messages,$new_message,array('%d','%d','%d','%d','%s', '%s','%s','%d','%d'))){
 					$numOK++;
 					unset( $_REQUEST['recipient'], $_REQUEST['subject'], $_REQUEST['content'] );
 
@@ -103,7 +103,7 @@ function youpzt_messages_send()
 							$email_address = get_bloginfo( 'admin_email' );
 
 						$email_subject = strip_tags( $email_subject );
-						if ( get_magic_quotes_gpc() )
+						if ( get_magic_quotes_gpc())
 						{
 							$email_subject = stripslashes( $email_subject );
 							$email_body = stripslashes( $email_body );
@@ -155,9 +155,7 @@ function youpzt_messages_send()
 					if ( empty( $_GET['id'] ) )
 					{
 						$content = isset( $_REQUEST['content'] ) ?  $_REQUEST['content']  : '';
-					}
-					else
-					{
+					}else{
 						$id = $_GET['id'];
 						$msg = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $id . '" LIMIT 1' );
 
@@ -168,15 +166,12 @@ function youpzt_messages_send()
 						$content  = stripslashes( $content );
 					}
 					// if auto suggest feature is turned on
-					if ( $option['type'] == 'autosuggest' )
-					{
+					if ( $option['type'] == 'autosuggest'){
 						?>
                <input id="recipient" type="text" name="recipient" class="large-text" />
 						<?php
 
-					}
-					else // classic way: select recipient from dropdown list
-					{
+					}else{
 						// Get all users of blog
 						$args = array(
 							'order'   => 'ASC',

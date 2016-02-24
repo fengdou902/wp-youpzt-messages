@@ -1,4 +1,4 @@
-#options-group-1 .form-table td {
+#options-group-1 .form-table td,.send-page-wrap .form-table td{
 	width:65%;
 }
 .form-table select {

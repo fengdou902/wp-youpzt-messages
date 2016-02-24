@@ -88,7 +88,7 @@ function youpzt_messages_admin_print_styles_all()
  * Option page
  * Change number of PMs for each group
  */
-function youpzt_messages_option_page() {
+function youpzt_messages_option_page(){
 	?>
 <div class="wrap wpbody-content">
 	<h2><?php _e( '站内信设置', 'youpzt' ); ?></h2>
@@ -108,8 +108,6 @@ function youpzt_messages_option_page() {
 			echo '<h3>', __( '请设定每种用户的站内信数量限制:', 'youpzt' ), '</h3>';
 			echo '<p>', __( '<b><i>0</i></b> 表示 <b><i>无限制</i></b>', 'youpzt' ), '</p>';
 			echo '<p>', __( '<b><i>-1</i></b> 表示 <b><i>不允许</i></b> 发送站内信', 'youpzt' ), '</p>';
-
-
 			?>
 			<table class="form-table">
 				<tr>
