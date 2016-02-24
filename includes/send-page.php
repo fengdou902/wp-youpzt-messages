@@ -68,9 +68,9 @@ function youpzt_messages_send()
 				
 				$new_message = array(
 							'id'        => NULL,
-							'msg_type'   =>1,
-							'from_user'    => $sender,
-							'to_user' => $rec_id,
+							'msg_type'  =>1,
+							'from_user' => $sender,
+							'to_user' 	=> $rec_id,
 							'subject'   => $subject,
 							'content'   => $content,
 							'date'      => current_time('mysql'),

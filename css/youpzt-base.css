@@ -3,10 +3,8 @@ base.css
 2015/4/15
 */
 @media (min-width: 1200px) {
-	  .container {
-	    max-width: 1170px;
-	  }
-  }
+	.container {max-width: 1170px;}
+ }
 /*文字排版*/
 .f12{font-size:12px;}
 .f13{font-size:13px;}
