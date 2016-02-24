@@ -195,7 +195,7 @@ function youpzt_messages_send()
             </tr>
             <tr>
                 <th><?php _e( '主题', 'youpzt' ); ?></th>
-                <td><input type="text" name="subject" value="<?php echo $subject; ?>" class="large-text" /></td>
+                <td><input type="text" name="subject" value="<?php echo $subject; ?>" class="large-text ypzt-message-subject" /></td>
             </tr>
             <tr>
                 <th><?php _e( '内容', 'youpzt' ); ?></th>
