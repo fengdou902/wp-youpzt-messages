@@ -13,8 +13,8 @@ function youpzt_messages_manage()
 
 		check_admin_referer( "ypm-view_inbox_msg_$id" );
 
-		// mark message as read
-		$wpdb->update( $wpdb->youpzt_messages, array( 'read' => 1 ), array( 'id' => $id ) );
+		// mark message as msg_read
+		$wpdb->update( $wpdb->youpzt_messages, array( 'msg_read' => 1 ), array( 'id' => $id ) );
 
 		// select message information
 		$msg = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $id . '" LIMIT 1' );
@@ -63,7 +63,7 @@ function youpzt_messages_manage()
 		return;
 	}
 
-	// if mark messages as read
+	// if mark messages as msg_read
 	if ( isset( $_GET['action'] ) && 'mar' == $_GET['action'] && !empty( $_GET['id'] ) )
 	{
 		$id = $_GET['id'];
@@ -77,7 +77,7 @@ function youpzt_messages_manage()
 		}
 		$n = count( $id );
 		$id = implode( ',', $id );
-		if ( $wpdb->query( 'UPDATE ' . $wpdb->youpzt_messages.' SET `read` = "1" WHERE `id` IN (' . $id . ')' ) )
+		if ( $wpdb->query( 'UPDATE ' . $wpdb->youpzt_messages.' SET `msg_read` = "1" WHERE `id` IN (' . $id . ')' ) )
 		{
 			$status = _n( '条信息已标记为已读。', '条信息已标记为已读。', $n, 'youpzt' );
 		}else{
@@ -147,7 +147,7 @@ function youpzt_messages_manage()
 		$num_unread = 0;
 		foreach ( $msgs as $msg )
 		{
-			if ( !( $msg->read ) )
+			if ( !( $msg->msg_read ) )
 			{
 				$num_unread++;
 			}
@@ -192,7 +192,7 @@ function youpzt_messages_manage()
 						<td><a href="#"><?php echo get_avatar($msg->to_user,32);echo $receipt_name; ?></a></td>
 						<td>
 							<?php
-							if ( $msg->read ){
+							if ( $msg->msg_read ){
 								echo '<a href="', wp_nonce_url( "?page=youpzt_messages_manage&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ), '">', stripcslashes( $msg->subject ), '</a>';
 							}else{
 								echo '<a href="', wp_nonce_url( "?page=youpzt_messages_manage&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ), '"><b>', stripcslashes( $msg->subject ), '</b></a>';
@@ -203,7 +203,7 @@ function youpzt_messages_manage()
 								<a href="<?php echo wp_nonce_url( "?page=youpzt_messages_manage&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ); ?>"><?php _e( '查看', 'youpzt' ); ?></a>
 							</span>
 								<?php
-								if ( !( $msg->read ) )
+								if ( !( $msg->msg_read ) )
 								{
 									?>
 									<span>
@@ -219,7 +219,7 @@ function youpzt_messages_manage()
 
 							</div>
 						</td>
-						<td><?php if ($msg->read==1) {echo '已读';}elseif($msg->read==0){echo '<span class="noread" style="color:#10b68c;">未读？</span>';}else{echo '未知';};?></td>
+						<td><?php if ($msg->msg_read==1) {echo '已读';}elseif($msg->msg_read==0){echo '<span class="noread" style="color:#10b68c;">未读？</span>';}else{echo '未知';};?></td>
 						<td><?php echo $msg->date; ?></td>
 					</tr>
 						<?php

@@ -24,14 +24,14 @@ define( 'YPM_JS_URL', trailingslashit( YPM_URL . 'js' ) );
 define( 'YPM_IMG_URL', trailingslashit( YPM_URL . 'images' ) );
 
 include_once YPM_DIR . 'index.php';
+include_once YPM_INC_DIR . 'functions.php';
 include_once YPM_INC_DIR . 'widget.php';
 include_once YPM_INC_DIR . 'inbox-page.php';
 include_once YPM_INC_DIR . 'send-page.php';
 include_once YPM_INC_DIR . 'outbox-page.php';
 include_once YPM_INC_DIR . 'manage-messages.php';
 
-if ( is_admin() )
-{
+if ( is_admin()){
 	include_once YPM_INC_DIR . 'functions-admin.php';
 	include_once YPM_INC_DIR . 'options.php';
 }

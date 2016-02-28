@@ -13,8 +13,8 @@ function youpzt_messages_inbox()
 
 		check_admin_referer( "ypm-view_inbox_msg_$id" );
 
-		// mark message as read
-		$wpdb->update( $wpdb->youpzt_messages, array( 'read' => 1 ), array( 'id' => $id ) );
+		// mark message as msg_msg_read
+		$wpdb->update( $wpdb->youpzt_messages, array( 'msg_msg_read' => 1 ), array( 'id' => $id ) );
 
 		// select message information
 		$msg = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $id . '" LIMIT 1' );
@@ -63,7 +63,7 @@ function youpzt_messages_inbox()
 		return;
 	}
 
-	// if mark messages as read
+	// if mark messages as msg_read
 	if ( isset( $_GET['action'] ) && 'mar' == $_GET['action'] && !empty( $_GET['id'] ) )
 	{
 		$id = $_GET['id'];
@@ -79,7 +79,7 @@ function youpzt_messages_inbox()
 		}
 		$n = count( $id );
 		$id = implode( ',', $id );
-		if ( $wpdb->query( 'UPDATE ' . $wpdb->youpzt_messages.' SET `read` = "1" WHERE `id` IN (' . $id . ')' ) )
+		if ( $wpdb->query( 'UPDATE ' . $wpdb->youpzt_messages.' SET `msg_read` = "1" WHERE `id` IN (' . $id . ')' ) )
 		{
 			$status = _n( '条信息已标记为已读。', '条信息已标记为已读。', $n, 'youpzt' );
 		}else{
@@ -140,15 +140,15 @@ function youpzt_messages_inbox()
 		echo '<p>', __( '收件箱中没有信息。', 'youpzt' ), '</p>';
 	}else{
 		$n = count( $msgs );
-		$num_unread = 0;
+		$num_unmsg_read = 0;
 		foreach ( $msgs as $msg )
 		{
-			if ( !( $msg->read ) )
+			if ( !( $msg->msg_read ) )
 			{
-				$num_unread++;
+				$num_unmsg_read++;
 			}
 		}
-		echo '<p>', sprintf( _n( '您有 %d 条站内信 （%d 条未读）.', '您有 %d 条站内信 （%d 条未读）.', $n, 'youpzt' ), $n, $num_unread ), '</p>';
+		echo '<p>', sprintf( _n( '您有 %d 条站内信 （%d 条未读）.', '您有 %d 条站内信 （%d 条未读）.', $n, 'youpzt' ), $n, $num_unmsg_read ), '</p>';
 		?>
 		<form action="" method="get">
 			<?php wp_nonce_field( 'ypm-bulk-action_inbox' ); ?>
@@ -188,7 +188,7 @@ function youpzt_messages_inbox()
 						<td class="yzpt-content-td">
 						
 							<?php
-							if ( $msg->read ){
+							if ( $msg->msg_read ){
 								echo '<a href="', wp_nonce_url( "?page=youpzt_messages_inbox&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ), '">', stripcslashes( $msg->subject ), '</a>';
 							}else{
 								echo '<a href="', wp_nonce_url( "?page=youpzt_messages_inbox&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ), '"><b>', stripcslashes( $msg->subject ), '</b></a>';
@@ -199,7 +199,7 @@ function youpzt_messages_inbox()
 								<a href="<?php echo wp_nonce_url( "?page=youpzt_messages_inbox&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ); ?>"><?php _e( '查看', 'youpzt' ); ?></a>
 							</span>
 								<?php
-								if ( !($msg->read))
+								if ( !($msg->msg_read))
 								{
 									?>
 									<span>
@@ -218,7 +218,7 @@ function youpzt_messages_inbox()
 							</span>
 							</div>
 						</td>
-						<td><?php if ($msg->read==1) {echo '已读';}elseif($msg->read==0){echo '<span class="noread" style="color:#10b68c;">未读？</span>';}else{echo '未知';};?></td>
+						<td><?php if ($msg->msg_read==1) {echo '已读';}elseif($msg->msg_read==0){echo '<span class="nomsg_read" style="color:#10b68c;">未读？</span>';}else{echo '未知';};?></td>
 						<td><?php echo $msg->date; ?></td>
 					</tr>
 						<?php

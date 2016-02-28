@@ -145,7 +145,7 @@ function youpzt_messages_outbox()
 							</span>
                             </div>
                         </td>
-                        <td><?php if ($msg->read==1) {echo '是';}elseif($msg->read==0){echo '<span class="noread" style="color:#10b68c;">否</span>';}else{echo '未知';};?></td>
+                        <td><?php if ($msg->msg_read==1) {echo '是';}elseif($msg->msg_read==0){echo '<span class="noread" style="color:#10b68c;">否</span>';}else{echo '未知';};?></td>
                         <td><?php echo $msg->date; ?></td>
                     </tr>
                         <?php

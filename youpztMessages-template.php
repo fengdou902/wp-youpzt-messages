@@ -25,7 +25,7 @@ global $current_user;
 	<h2><?php the_title(); ?></h2>
 	<div class="ypzt-message-title-img"><?php echo get_avatar($current_user->ID,64);?><span><?php echo $current_user->display_name;?></span></div>
 	<div class="ypzt-message-information">
-		<span>未读消息：<span class="ypzt-number"><a href="javascript:(0)">10</a></span>条</span>
+		<span>未读消息：<span class="ypzt-number"><a href="javascript:(0)"><?php echo get_messages_noread_count($current_user->ID);?></a></span>条</span>
 		<span>您共收到消息：<span class="ypzt-number"><a href="javascript:(0)" onclick="ypmSwitch('pm-inbox');">10</a></span>条</span>
 	</div>
 	<div class="ypzt-message-title">

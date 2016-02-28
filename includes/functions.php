@@ -24,7 +24,7 @@ function to_user_message($user_id,$subject,$content,$date='',$from_user=''){
                                     'subject'=>$subject,//默认是产品名                     
                                     'content'=>$content,//内容
                                     'date'=>$date,
-                                    'read' =>0,
+                                    'msg_read' =>0,
                                     'deleted'=>0
                             	),
                             array('%d','%d','%d','%s','%s','%s','%d','%d'));
@@ -130,9 +130,12 @@ function get_messages_count($user_id,$read=0){
 		if ($user_id) {
 			global $wpdb;
 			if ($read==0) {//未读
-				 $count=$wpdb->get_var($wpdb->prepare("SELECT count(*) FROM $wpdb->youpzt_messages where msg_type=%d and to_user=%d and read=%d and deleted<>%d;",1,$user_id,0,2));//查询结果数量
+				 $count=$wpdb->get_var($wpdb->prepare("SELECT count(*) FROM $wpdb->youpzt_messages where msg_type=%d and to_user=%d and msg_read=%d and deleted<>%d;",1,$user_id,0,2));//查询结果数量
+				 if (!$count) {
+				 		$count=0;
+				 }
 			}elseif ($read==1) {//已读
-				$count=$wpdb->get_var($wpdb->prepare("SELECT count(*) FROM $wpdb->youpzt_messages where msg_type=%d and to_user=%d and read=%d and deleted<>%d;",1,$user_id,1,2));//查询结果数量
+				$count=$wpdb->get_var($wpdb->prepare("SELECT count(*) FROM $wpdb->youpzt_messages where msg_type=%d and to_user=%d and msg_read=%d and deleted<>%d;",1,$user_id,1,2));//查询结果数量
 			}elseif($read==-1){//获取总的数量
 				$count=$wpdb->get_var($wpdb->prepare("SELECT count(*) FROM $wpdb->youpzt_messages where msg_type=%d and to_user=%d and deleted<>%d;",1,$user_id,2));//查询结果数量
 			}

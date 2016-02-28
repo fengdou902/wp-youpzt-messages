@@ -74,7 +74,7 @@ function youpzt_messages_send()
 							'subject'   => $subject,
 							'content'   => $content,
 							'date'      => current_time('mysql'),
-							'read'      => 0,
+							'msg_read'      => 0,
 							'deleted'   => 0
 				);
 				// insert into database

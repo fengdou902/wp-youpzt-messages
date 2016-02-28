@@ -44,8 +44,8 @@ class youpzt_Widget extends WP_Widget
 		}
 
 		// get number of PM
-		$num_pm = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $wpdb->youpzt_messages.' WHERE `recipient` = "' . $current_user->user_login . '" AND `deleted` != "2"' );
-		$num_unread = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $wpdb->youpzt_messages.' WHERE `recipient` = "' . $current_user->user_login . '" AND `read` = 0 AND `deleted` != "2"' );
+		$num_pm = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $wpdb->youpzt_messages.' WHERE `to_user` = "' . $current_user->ID . '" AND `deleted` != "2"' );
+		$num_unread = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $wpdb->youpzt_messages.' WHERE `to_user` = "' . $current_user->ID . '" AND `read` = 0 AND `deleted` != "2"' );
 
 		if ( empty( $num_pm ) )
 		{
@@ -60,13 +60,13 @@ class youpzt_Widget extends WP_Widget
 
 		if ( $instance['num_pm'] )
 		{
-			$msgs = $wpdb->get_results( 'SELECT `id`, `sender`, `subject`, `read`, `date` FROM ' . $wpdb->youpzt_messages.' WHERE `recipient` = "' . $current_user->user_login . '" AND `deleted` != "2" ORDER BY `date` DESC LIMIT ' . $instance['num_pm'] );
+			$msgs = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `to_user` = "' . $current_user->ID . '" AND `deleted` != "2" ORDER BY `date` DESC LIMIT ' . $instance['num_pm'] );
 			if ( count( $msgs ) )
 			{
 				echo '<ol>';
 				foreach ( $msgs as $msg )
 				{
-					$msg->sender = $wpdb->get_var( "SELECT display_name FROM $wpdb->users WHERE user_login = '$msg->sender'" );
+					$msg->sender = $wpdb->get_var( "SELECT display_name FROM $wpdb->users WHERE ID = '$msg->from_user'" );
 					echo '<li>';
 					if ( !$msg->read )
 					{
@@ -77,14 +77,14 @@ class youpzt_Widget extends WP_Widget
 					{
 						echo '</b>';
 					}
-					printf( __( '<br />by <b>%s</b><br />at %s', 'youpzt' ), $msg->sender, $msg->date );
+					printf( __( '<br />by <b>%s</b><br />at %s', 'youpzt' ), $msg->from_user, $msg->date );
 					echo '</li>';
 				}
 				echo '</ol>';
 			}
 		}
 
-		echo '<p><a href="', get_bloginfo( 'wpurl' ), '/wp-admin/admin.php?page=youpzt_messages_inbox">', __( 'Click here to go to inbox', 'youpzt' ), ' &raquo;</a></p>';
+		echo '<p><a href="', get_bloginfo( 'wpurl' ), '/wp-admin/admin.php?page=youpzt_messages_inbox">', __( '点击这儿前往收件箱', 'youpzt' ), ' &raquo;</a></p>';
 
 		echo $after_widget;
 	}
@@ -110,7 +110,7 @@ class youpzt_Widget extends WP_Widget
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		?>
 	<p>
-		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
+		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( '标题:' ); ?></label>
 		<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" style="width:100%;" />
 	</p>
 
