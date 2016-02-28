@@ -1,4 +1,4 @@
-#WordPress站内信插件wp-youpzt-messages
+##WordPress站内信插件wp-youpzt-messages
 * 作者:youpzt  
 * 官网: http://www.youpzt.com  
 * WordPress最低版本: 3.0.1  
