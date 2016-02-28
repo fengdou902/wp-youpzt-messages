@@ -26,7 +26,7 @@ function to_user_message($user_id,$subject,$content,$date='',$from_user=''){
                                     'date'=>$date,
                                     'read' =>0,
                                     'deleted'=>0
-                            ),
+                            	),
                             array('%d','%d','%d','%s','%s','%s','%d','%d'));
       return $wpdb->insert_id;
 	}else{
