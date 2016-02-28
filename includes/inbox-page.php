@@ -122,15 +122,13 @@ function youpzt_messages_inbox()
 		if ( $error )
 		{
 			$status = __( '错误，请再次尝试', 'youpzt' );
-		}
-		else
-		{
+		}else{
 			$status = _n( '消息已删除', '消息已删除', count( $id ), 'youpzt' );
 		}
 	}
 
 	// show all messages which have not been deleted by this user (deleted status != 2)
-	$msgs = $wpdb->get_results( 'SELECT `id`, `from_user`, `subject`, `read`, `date` FROM ' . $wpdb->youpzt_messages.' WHERE `to_user` = "' . $current_user->ID . '" AND `deleted` != "2" ORDER BY `date` DESC' );
+	$msgs = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `to_user` = "' . $current_user->ID . '" AND `deleted` != "2" ORDER BY `date` DESC' );
 	?>
 <div class="wrap">
 	<h2><?php _e( '收件箱', 'youpzt' ); ?><a href="<?php echo admin_url().'admin.php?page=youpzt_messages_send';?>" class="page-title-action">发送</a></h2>
