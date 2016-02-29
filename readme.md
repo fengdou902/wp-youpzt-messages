@@ -51,49 +51,56 @@
 ### 常用API
 * 如果插件提供的如消息模板不能满足你的前台排版需求，我们内置了如下的API方便二次开发页面模板
 
-1, 获取用户收件箱结果集
+1, 获取用户收件箱结果集  
+
 `/**
  * @param int $user_id 用户id
  *return array/obj 用户收件箱结果集
  */
 get_inbox_messages($user_id)`
 
-2, 获取用户发件箱结果集
+2, 获取用户发件箱结果集  
+
 `/**
  * @param int $user_id 用户id
  *return array/obj 用户收件箱结果集
  */
 get_outbox_messages($user_id)`
 
-3, 获取用户发件箱结果集
+3, 获取用户发件箱结果集  
+
 `/**
  * @param int $user_id 用户id
  *return array/obj 用户收件箱结果集
  */
 get_youpzt_messages($user_id,$type='inbox')`
 
-4, 获取用户未读消息数
+4, 获取用户未读消息数  
+
 `/**
  * @param int $user_id 用户id
  *return int 未读消息数量
  */
 get_messages_noread_count($user_id)`
 
-5, 获取用户已读消息数
+5, 获取用户已读消息数  
+
 `/**
  * @param int $user_id 用户id
  *return int 已读消息数量
  */
 get_messages_read_count($user_id)`
 
-6, 获取用户总消息数量
+6, 获取用户总消息数量  
+
 `/**
  * @param int $user_id 用户id
  *return int 总消息数量
  */
 get_messages_all_count($user_id)`
 
-7, 向某个用户发送站内信
+7, 向某个用户发送站内信  
+
 `/**
  * @param int $user_id 接收者用户id
   * @param int $subject 主题
