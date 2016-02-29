@@ -8,7 +8,7 @@
  */
 function to_user_message($user_id,$subject,$content,$date='',$from_user=''){
 
-	$user_id=intval($user_id);
+		$user_id=intval($user_id);
 	if ($user_id&&$subject&&$content) {
 			global $wpdb,$current_user;
 			if (empty($from_user)) {
@@ -84,7 +84,7 @@ function get_youpzt_messages($user_id,$type='inbox'){
 
 
 /**
- * 获取用户未读消息
+ * 获取用户未读消息数
  *
  * @param int $user_id 用户id
  *return int 未读消息数量
@@ -98,7 +98,7 @@ function get_messages_noread_count($user_id){
 }
 
 /**
- * 获取用户已读消息
+ * 获取用户已读消息数
  *
  * @param int $user_id 用户id
  *return int 已读消息数量
