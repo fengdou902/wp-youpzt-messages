@@ -2,10 +2,14 @@
 /**
  * Inbox page
  */
-function youpzt_messages_inbox()
+function youpzt_messages_inbox($page_id=false)
 {
 	global $wpdb, $current_user;
-
+	if ($page_id) {
+		$page_url=get_permalink($page_id);
+	}else{
+		$page_url='?page=youpzt_messages_inbox';
+	}
 // if view message
 	if ( isset( $_GET['action'] ) && 'view' == $_GET['action'] && !empty( $_GET['id'] ) )
 	{
@@ -40,7 +44,7 @@ function youpzt_messages_inbox()
 				<td>
 						<span class="delete">
 							<a class="delete"
-								href="<?php echo wp_nonce_url( "?page=youpzt_messages_inbox&action=delete&id=$msg->id", 'ypm-delete_inbox_msg_' . $msg->id ); ?>"><?php _e( '删除', 'youpzt' ); ?></a>
+								href="<?php echo wp_nonce_url( "$page_url&action=delete&id=$msg->id", 'ypm-delete_inbox_msg_' . $msg->id ); ?>"><?php _e( '删除', 'youpzt' ); ?></a>
 						</span>
 						<span class="reply">
 							| <a class="reply"
@@ -131,7 +135,7 @@ function youpzt_messages_inbox()
 	$msgs = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `to_user` = "' . $current_user->ID . '" AND `deleted` != "2" ORDER BY `date` DESC' );
 	?>
 <div class="wrap">
-	<h2><?php _e( '收件箱', 'youpzt' ); ?><a href="<?php echo admin_url().'admin.php?page=youpzt_messages_send';?>" class="page-title-action">发送</a></h2>
+	<h2><?php _e( '收件箱', 'youpzt' ); ?><?php if(is_admin()){?><a href="<?php echo admin_url().'admin.php?page=youpzt_messages_send';?>" class="page-title-action">发送</a><?php };?></h2>
 	<?php
 	if (!empty( $status)){
 		echo '<div id="message" class="updated fade"><p>',$status,'</p></div>';
@@ -189,32 +193,33 @@ function youpzt_messages_inbox()
 						
 							<?php
 							if ( $msg->msg_read ){
-								echo '<a href="', wp_nonce_url( "?page=youpzt_messages_inbox&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ), '">', stripcslashes( $msg->subject ), '</a>';
+								$isStrong_subject=stripcslashes($msg->subject);
 							}else{
-								echo '<a href="', wp_nonce_url( "?page=youpzt_messages_inbox&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ), '"><b>', stripcslashes( $msg->subject ), '</b></a>';
+									$isStrong_subject='<strong>'.stripcslashes( $msg->subject ).'</strong>';
 							}
+							echo '<a href="', wp_nonce_url( "$page_url&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ), '">'.$isStrong_subject.'</a>';
 							?>
 							<div class="row-actions">
 							<span>
-								<a href="<?php echo wp_nonce_url( "?page=youpzt_messages_inbox&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ); ?>"><?php _e( '查看', 'youpzt' ); ?></a>
+								<a href="<?php echo wp_nonce_url( "$page_url&action=view&id=$msg->id", 'ypm-view_inbox_msg_' . $msg->id ); ?>"><?php _e( '查看', 'youpzt' ); ?></a>
 							</span>
 								<?php
 								if ( !($msg->msg_read))
 								{
 									?>
 									<span>
-								| <a href="<?php echo wp_nonce_url( "?page=youpzt_messages_inbox&action=mar&id=$msg->id", 'ypm-mar_inbox_msg_' . $msg->id ); ?>"><?php _e( '标记为已读', 'youpzt' ); ?></a>
+								| <a href="<?php echo wp_nonce_url( "$page_url&action=mar&id=$msg->id", 'ypm-mar_inbox_msg_' . $msg->id ); ?>"><?php _e( '标记为已读', 'youpzt' ); ?></a>
 							</span>
 									<?php
 								}
 								?>
 								<span class="delete">
 								| <a class="delete"
-									href="<?php echo wp_nonce_url( "?page=youpzt_messages_inbox&action=delete&id=$msg->id", 'ypm-delete_inbox_msg_' . $msg->id ); ?>"><?php _e( '删除', 'youpzt' ); ?></a>
+									href="<?php echo wp_nonce_url( "$page_url&action=delete&id=$msg->id", 'ypm-delete_inbox_msg_' . $msg->id ); ?>"><?php _e( '删除', 'youpzt' ); ?></a>
 							</span>
 							<span class="reply">
 								| <a class="reply"
-								href="<?php echo wp_nonce_url( "?page=youpzt_messages_send&recipient=$sender_name&id=$msg->id&subject=Re: " . stripcslashes( $msg->subject ), 'ypm-reply_inbox_msg_' . $msg->id ); ?>"><?php _e( '回复', 'youpzt' ); ?></a>
+								href="<?php echo wp_nonce_url( "$page_url&recipient=$sender_name&id=$msg->id&subject=Re: " . stripcslashes( $msg->subject ), 'ypm-reply_inbox_msg_' . $msg->id ); ?>"><?php _e( '回复', 'youpzt' ); ?></a>
 							</span>
 							</div>
 						</td>

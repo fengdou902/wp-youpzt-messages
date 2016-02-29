@@ -2,10 +2,14 @@
 /**
  * Outbox page
  */
-function youpzt_messages_outbox()
+function youpzt_messages_outbox($page_id=false)
 {
     global $wpdb, $current_user;
-
+    if ($page_id) {
+        $page_url=get_permalink($page_id);
+    }else{
+        $page_url='?page=youpzt_messages_outbox';
+    }
     // if view message
     if (isset($_GET['action']) && 'view' == $_GET['action'] && !empty($_GET['id'])) {
         $id = $_GET['id'];
@@ -20,7 +24,7 @@ function youpzt_messages_outbox()
     <div class="wrap">
         <h2><?php _e('已发信息', 'youpzt'); ?></h2>
 
-        <p><a href="?page=youpzt_messages_outbox"><?php _e('返回已发信息', 'youpzt'); ?></a></p>
+        <?php if(is_admin()){?><p><a href="?page=youpzt_messages_outbox"><?php _e('返回已发信息', 'youpzt'); ?></a></p><?php };?>
         <table class="widefat fixed" cellspacing="0">
             <thead>
             <tr>
@@ -31,12 +35,12 @@ function youpzt_messages_outbox()
             </thead>
             <tbody>
             <tr>
-                <td><?php printf(__('<b>接收者</b>: %s<br /><b>Date</b>: %s', 'youpzt'),$recipient_name, $msg->date); ?></td>
-                <td><?php printf(__('<p><b>主题</b>: %s</p><p>%s</p>', 'youpzt'), stripcslashes($msg->subject), nl2br(stripcslashes($msg->content))); ?></td>
+                <td><?php printf(__('<strong>接收者</strong>: %s<br /><strong>Date</strong>: %s', 'youpzt'),$recipient_name, $msg->date); ?></td>
+                <td><?php printf(__('<p><strong>主题</strong>: %s</p><p>%s</p>', 'youpzt'), stripcslashes($msg->subject), nl2br(stripcslashes($msg->content))); ?></td>
                 <td>
 						<span class="delete">
 							<a class="delete"
-                               href="<?php echo wp_nonce_url("?page=youpzt_messages_outbox&action=delete&id=$msg->id", 'ypm-delete_outbox_msg_' . $msg->id); ?>"><?php _e('删除', 'youpzt'); ?></a>
+                               href="<?php echo wp_nonce_url("$page_url&action=delete&id=$msg->id", 'ypm-delete_outbox_msg_' . $msg->id); ?>"><?php _e('删除', 'youpzt'); ?></a>
 						</span>
                 </td>
             </tr>
@@ -91,7 +95,7 @@ function youpzt_messages_outbox()
     $msgs = $wpdb->get_results('SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `from_user` = "' . $current_user->ID . '" AND `deleted` != 1 ORDER BY `date` DESC');
     ?>
 <div class="wrap">
-    <h2><?php _e('已发信息', 'youpzt'); ?><a href="<?php echo admin_url().'admin.php?page=youpzt_messages_send';?>" class="page-title-action">发送</a></h2>
+    <h2><?php _e('已发信息', 'youpzt'); ?><?php if(is_admin()){?><a href="<?php echo admin_url().'admin.php?page=youpzt_messages_send';?>" class="page-title-action">发送</a><?php };?></h2>
     <?php
     if (!empty($status)){
         echo '<div id="message" class="updated fade"><p>', $status, '</p></div>';
@@ -105,10 +109,11 @@ function youpzt_messages_outbox()
         <form action="" method="get">
             <?php wp_nonce_field('ypm-bulk-action_outbox'); ?>
             <input type="hidden" name="action" value="delete"/> <input type="hidden" name="page" value="youpzt_messages_outbox"/>
-
-            <div class="tablenav">
-                <input type="submit" class="button-secondary" value="<?php _e('删除选中的项', 'youpzt'); ?>"/>
-            </div>
+            <?php if(is_admin()){?>
+                <div class="tablenav">
+                    <input type="submit" class="button-secondary" value="<?php _e('删除选中的项', 'youpzt'); ?>"/>
+                </div>
+            <?php };?>
 
             <table class="widefat fixed" cellspacing="0">
                 <thead>
@@ -137,11 +142,11 @@ function youpzt_messages_outbox()
                             ?>
                             <div class="row-actions">
 							<span>
-								<a href="<?php echo wp_nonce_url("?page=youpzt_messages_outbox&action=view&id=$msg->id", 'ypm-view_outbox_msg_' . $msg->id); ?>"><?php _e('查看', 'youpzt'); ?></a>
+								<a href="<?php echo wp_nonce_url("$page_url&action=view&id=$msg->id", 'ypm-view_outbox_msg_' . $msg->id); ?>"><?php _e('查看', 'youpzt'); ?></a>
 							</span>
 							<span class="delete">
 								| <a class="delete"
-                                     href="<?php echo wp_nonce_url("?page=youpzt_messages_outbox&action=delete&id=$msg->id", 'ypm-delete_outbox_msg_' . $msg->id); ?>"><?php _e('删除', 'youpzt'); ?></a>
+                                     href="<?php echo wp_nonce_url("$page_url&action=delete&id=$msg->id", 'ypm-delete_outbox_msg_' . $msg->id); ?>"><?php _e('删除', 'youpzt'); ?></a>
 							</span>
                             </div>
                         </td>

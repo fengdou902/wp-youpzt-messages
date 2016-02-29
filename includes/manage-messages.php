@@ -152,7 +152,7 @@ function youpzt_messages_manage()
 				$num_unread++;
 			}
 		}
-		echo '<p>', sprintf( _n( '网站共有 %d 条站内信 （%d 条未读）.', '有 %d 条站内信 （%d 条未读）.', $n, 'youpzt' ), $n, $num_unread ), '</p>';
+		echo '<p>', sprintf( _n( '共有 %d 条站内信 （%d 条未读）.', '有 %d 条站内信 （%d 条未读）.', $n, 'youpzt' ), $n, $num_unread ), '</p>';
 		?>
 		<form action="" method="get">
 			<?php wp_nonce_field( 'ypm-bulk-action_inbox' ); ?>
