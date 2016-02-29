@@ -55,39 +55,38 @@
 
 	@param int $user_id 用户id
 	return array/obj 用户收件箱结果集
+	
 	get_inbox_messages($user_id)
 
 2, 获取用户发件箱结果集  
 
 	@param int $user_id 用户id
 	return array/obj 用户收件箱结果集
+
 	get_outbox_messages($user_id)
 
-3, 获取用户发件箱结果集  
-
-	@param int $user_id 用户id
-	return array/obj 用户收件箱结果集
-	get_youpzt_messages($user_id,$type='inbox')
-
-4, 获取用户未读消息数  
+3, 获取用户未读消息数  
 
 	@param int $user_id 用户id
 	return int 未读消息数量
+
 	get_messages_noread_count($user_id)
 
-5, 获取用户已读消息数  
+4, 获取用户已读消息数  
 
 	@param int $user_id 用户id
 	return int 已读消息数量
+
 	get_messages_read_count($user_id)
 
-6, 获取用户总消息数量  
+5, 获取用户总消息数量  
 
 	@param int $user_id 用户id
 	return int 总消息数量
+
 	get_messages_all_count($user_id)
 
-7, 向某个用户发送站内信  
+6, 向某个用户发送站内信  
 
 	@param int $user_id 接收者用户id
 	@param int $subject 主题
@@ -96,7 +95,7 @@
 	@param int $from_user 发送者用户id(默认为当前用户，也可指定)
 	return bool true/false
 
-	*to_user_message($user_id,$subject,$content,$date='',$from_user='')*
+	to_user_message($user_id,$subject,$content,$date='',$from_user='')
 
 
 ### 更新日志
