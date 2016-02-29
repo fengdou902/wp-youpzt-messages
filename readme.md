@@ -95,7 +95,8 @@
 	@param datetime $date 时间(可选)
 	@param int $from_user 发送者用户id(默认为当前用户，也可指定)
 	return bool true/false
-	to_user_message($user_id,$subject,$content,$date='',$from_user='')
+
+	*to_user_message($user_id,$subject,$content,$date='',$from_user='')*
 
 
 ### 更新日志
