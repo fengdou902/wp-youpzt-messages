@@ -1,6 +1,6 @@
 ##WordPress站内信插件wp-youpzt-messages
 * 作者:youpzt  
-* 官网: http://www.youpzt.com  
+* 官网: http://www.youpzt.com/362.html  
 * WordPress最低版本: 3.0.1  
 * WordPress最高版本: 4.4  
 * License: GPLv2 or later  
@@ -9,7 +9,7 @@
 这个WordPress站内信插件允许你的WordPress网站用户之间可进行站内信互相通信
 ***
 ### 描述
-[项目主页](http://www.youpzt.com/wp-youpzt-messages) 
+[项目主页](http://www.youpzt.com/362.html) 
 *这个WordPress站内信插件允许你的WordPress网站用户之间可进行站内信互相通信*，用户有自己的收件箱和发件箱，超级管理员拥有所有用户组(Administrator, Editor, Author, Constributor and Subscriber)的站内信操作权限。
 
 * 同时可以进行站内信发送，同时让用户接收邮件通知。
@@ -18,7 +18,7 @@
 
 ### 相关
 * 如果你希望保持最新的更新，可以通过github获取当前最新的版本（完整版）。
-* 官网提供了稳定版本的下载：http://www.youpzt.com/wp-youpzt-messages
+* 官网提供了稳定版本的下载：http://www.youpzt.com/362.html
 * wp-youpzt-messages插件为了做到更好更方便使用，感谢这些免费项目（排名不分先后）  
 	1， Private Messages For WordPress
 	2， Front End PM
