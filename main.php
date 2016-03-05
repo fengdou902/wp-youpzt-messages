@@ -40,6 +40,8 @@ add_action( 'admin_notices', 'youpzt_messages_notify' );
 add_action( 'admin_bar_menu', 'youpzt_messages_adminbar', 300 );
 add_action( 'wp_ajax_youpzt_messages_get_users', 'youpzt_messages_get_users' );
 
+/* 注册激活插件时要调用的函数 */ 
+register_activation_hook( __FILE__, 'youpzt_messages_activate' );
 /**
  * Show notification of new PM
  */

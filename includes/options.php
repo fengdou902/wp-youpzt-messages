@@ -92,10 +92,10 @@ function youpzt_messages_option_page(){
 	?>
 <div class="wrap wpbody-content">
 	<h2><?php _e( '站内信设置', 'youpzt' ); ?></h2>
-<h2 class="nav-tab-wrapper">
+<!--<h2 class="nav-tab-wrapper">
 	<a href="#options-group-1" id="options-group-1-tab" class="nav-tab">基本设置</a>
 	<a href="#options-group-2" id="options-group-2-tab" class="nav-tab">安装指南</a>
-</h2>
+</h2>-->
 
 <div class="metabox-holder">
 	<div id="options-group-1" class="group " style="width:600px;float:left">

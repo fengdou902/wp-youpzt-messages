@@ -1,6 +1,5 @@
 <?php 
-/* 注册激活插件时要调用的函数 */ 
-register_activation_hook( __FILE__, 'youpzt_messages_activate' );
+
 /**
  * Create table and register an option when activate
  *
@@ -21,11 +20,10 @@ function youpzt_messages_activate()
 					`subject` text NOT NULL,
 					`content` text NOT NULL,
 					`date` datetime NOT NULL,
-					`read` tinyint(1) NOT NULL,
+					`msg_read` tinyint(1) NOT NULL,
 					`deleted` tinyint(1) NOT NULL,
 					PRIMARY KEY (`id`)
 				)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;';
-
 		dbDelta($query);
 		//$wpdb->query( $query );
 	 }
@@ -45,6 +43,7 @@ function youpzt_messages_activate()
 	);
 	add_option( 'youpzt_messages_option', $default_option, '', 'no' );
 }
+
 global $pagenow;
 $admin_page_GET=isset($_GET['page'])?$_GET['page']:false;
 if (is_admin()&&$admin_page_GET=='youpzt_messages_option'&& isset( $_GET['active'])){
@@ -64,29 +63,29 @@ add_action( 'init', 'youpztMessages_define_table' );
 //发送订阅请求
 add_action('parse_request', 'go_subscribe', 4);
 if ( ! function_exists( 'go_subscribe' )) :
-function go_subscribe($wp){
-	$data_token=isset($_GET["token"])?$_GET["token"]:false;//绑定token的安全码
+	function go_subscribe($wp){
+		$data_token=isset($_GET["token"])?$_GET["token"]:false;//绑定token的安全码
 
-	if($data_token=='open_subscribe'){
-		$subscribe_email=isset($_GET['email'])? $_GET['email']:false;
-		$from_url=$_SERVER['HTTP_HOST'];
-		$subscribe_code = array(
-			"from_url"=>$from_url,
-			"email"=>$subscribe_email,
-			"_form_"=>"subscriptionFront"
-		);
-		
-		echo https_post("http://www.youpzt.com?token=get_subscribe",$subscribe_code);
-		exit;
-	}elseif($data_token=='cancel_subscribe'){
-		global $current_user;
-        $user_id = $current_user->ID;
-		/* If user clicks to ignore the notice, add that to their user meta */
+		if($data_token=='open_subscribe'){
+			$subscribe_email=isset($_GET['email'])? $_GET['email']:false;
+			$from_url=$_SERVER['HTTP_HOST'];
+			$subscribe_code = array(
+				"from_url"=>$from_url,
+				"email"=>$subscribe_email,
+				"_form_"=>"subscriptionFront"
+			);
+			
+			echo https_post("http://www.youpzt.com?token=get_subscribe",$subscribe_code);
+			exit;
+		}elseif($data_token=='cancel_subscribe'){
+			global $current_user;
+	        $user_id = $current_user->ID;
+			/* If user clicks to ignore the notice, add that to their user meta */
 
-		add_user_meta($user_id, 'youpzt-subscribe', 'true', true);
-		
-	}	
-}
+			add_user_meta($user_id, 'youpzt-subscribe', 'true', true);
+			
+		}	
+	}
 endif;
 	 //通过链接post获取数据
 if ( ! function_exists( 'https_post' ) ) :
