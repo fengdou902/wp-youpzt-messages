@@ -22,7 +22,7 @@ function youpzt_messages_add_menu()
 	global $wpdb, $current_user;
 
 	// Get number of unread messages
-	$num_unread = $wpdb->get_var( 'SELECT COUNT(`id`) FROM ' . $wpdb->youpzt_messages.' WHERE `recipient` = "' . $current_user->user_login . '" AND `read` = 0 AND `deleted` != "2"' );
+	$num_unread = $wpdb->get_var( 'SELECT COUNT(`id`) FROM ' . $wpdb->youpzt_messages.' WHERE `to_user` = "' . $current_user->user_login . '" AND `msg_read` = 0 AND `deleted` != "2"' );
 
 	if ( empty( $num_unread ) )
 		$num_unread = 0;
@@ -229,7 +229,8 @@ function youpzt_messages_option_page(){
 				'<p><strong>', __( '1、关于前台使用的站内信页面模板。', 'youpzt' ), '</strong></p>',
 				'<p>', __( '复制文件 <code>youpztMessages-template.php </code>到您的主题文件夹，使用叫做 <code>消息模板</code> 的模板创建页面。', 'youpzt' ), '</p>',
 				'<p>', __( '这个模板只有基本结构。您应该修改它以让它和您的主题相协调。', 'youpzt' ), '</p>',
-				'<p></p><p><strong>', __( '2、当站内信插件不能在你的网站正常使用时，请点击下面"初始化"', 'youpzt' ), '</strong></p>',
+				'<p></p><p><strong>', __( '2、添加一键前台显示简码', 'youpzt' ), '</strong>，<code>[youpztMessages_template]</code>使用可在创建的页面中添加</p>',
+				'<p></p><p><strong>', __( '3、当站内信插件不能在你的网站正常使用时，请点击下面"初始化"', 'youpzt' ), '</strong></p>',
 				'</div>';
 			?>
 			<input type="hidden" name="page" value="youpzt_messages_option">

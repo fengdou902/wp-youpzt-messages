@@ -119,4 +119,7 @@ function youpzt_load_message_template($template_path){
     }
 }
 add_filter( 'template_include', 'youpzt_load_message_template', 1 );
+
+
+add_shortcode('youpztMessages_template', 'youpztMessages_template_func')
 ?>

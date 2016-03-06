@@ -30,6 +30,7 @@ include_once YPM_INC_DIR . 'inbox-page.php';
 include_once YPM_INC_DIR . 'send-page.php';
 include_once YPM_INC_DIR . 'outbox-page.php';
 include_once YPM_INC_DIR . 'manage-messages.php';
+include_once YPM_INC_DIR . 'youpztMessages-template-func.php';
 
 if ( is_admin()){
 	include_once YPM_INC_DIR . 'functions-admin.php';
@@ -50,7 +51,7 @@ function youpzt_messages_notify()
 	global $wpdb, $current_user;
 
 	// get number of unread messages
-	$num_unread = (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $wpdb->youpzt_messages.' WHERE `recipient` = "' . $current_user->user_login . '" AND `read` = 0 AND `deleted` != "2"' );
+	$num_unread = (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $wpdb->youpzt_messages.' WHERE `to_user` = "' . $current_user->user_login . '" AND `msg_read` = 0 AND `deleted` != "2"' );
 
 	if ( !$num_unread )
 		return;
@@ -72,7 +73,7 @@ function youpzt_messages_adminbar()
 	global $wpdb, $current_user;
 
 	// get number of unread messages
-	$num_unread = (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $wpdb->youpzt_messages.' WHERE `recipient` = "' . $current_user->user_login . '" AND `read` = 0 AND `deleted` != "2"' );
+	$num_unread = (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $wpdb->youpzt_messages.' WHERE `to_user` = "' . $current_user->user_login . '" AND `msg_read` = 0 AND `deleted` != "2"' );
 
 	if ( $num_unread && is_admin_bar_showing() )
 	{
