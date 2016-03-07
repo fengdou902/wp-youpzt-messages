@@ -61,6 +61,6 @@ global $current_user;
 		<div id="pm-outbox" <?php if (!$show[2]) echo 'style="display:none"'; ?>><?php youpzt_messages_outbox(get_the_ID());?></div>
 	</div>
 	<?php endwhile; endif; ?>
-</div>
+
 
 <?php get_footer(); ?>
