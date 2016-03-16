@@ -58,39 +58,7 @@ function youpzt_messages_outbox($page_id=false)
         // don't need to do more!
         return;
     }
-
-    // if delete message
-    if (isset($_GET['action']) && 'delete' == $_GET['action'] && !empty($_GET['id'])) {
-        $id = $_GET['id'];
-
-        if (!is_array($id)) {
-            check_admin_referer("ypm-delete_outbox_msg_$id");
-            $id = array($id);
-        } else {
-            check_admin_referer("ypm-bulk-action_outbox");
-        }
-        $error = false;
-        foreach ($id as $msg_id) {
-            // check if the recipient has deleted this message
-            $recipient_deleted = $wpdb->get_var('SELECT `deleted` FROM ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $msg_id . '" LIMIT 1');
-            // create corresponding query for deleting message
-            if ($recipient_deleted == 2) {
-                $query = 'DELETE from ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $msg_id . '"';
-            } else {
-                $query = 'UPDATE ' . $wpdb->youpzt_messages.' SET `deleted` = "1" WHERE `id` = "' . $msg_id . '"';
-            }
-
-            if (!$wpdb->query($query)) {
-                $error = true;
-            }
-        }
-        if ($error) {
-            $status = __('错误，请再次尝试', 'youpzt');
-        } else {
-            $status = _n('消息已删除', '消息已删除', count($id), 'youpzt');
-        }
-    }
-
+ $status=deal_outbox_request_data();//过滤数据
     // show all messages
     $msgs = $wpdb->get_results('SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `from_user` = "' . $current_user->ID . '" AND `deleted` != 1 ORDER BY `date` DESC');
     ?>
@@ -174,6 +142,42 @@ function youpzt_messages_outbox($page_id=false)
     }
     ?>
 </div>
-<?php
+<?php };
+
+//过滤数据
+function deal_outbox_request_data(){
+    global $wpdb, $current_user;
+        // if delete message
+    if (isset($_GET['action']) && 'delete' == $_GET['action'] && !empty($_GET['id'])) {
+        $id = $_GET['id'];
+
+        if (!is_array($id)) {
+            check_admin_referer("ypm-delete_outbox_msg_$id");
+            $id = array($id);
+        } else {
+            check_admin_referer("ypm-bulk-action_outbox");
+        }
+        $error = false;
+        foreach ($id as $msg_id) {
+            // check if the recipient has deleted this message
+            $recipient_deleted = $wpdb->get_var('SELECT `deleted` FROM ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $msg_id . '" LIMIT 1');
+            // create corresponding query for deleting message
+            if ($recipient_deleted == 2) {
+                $query = 'DELETE from ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $msg_id . '"';
+            } else {
+                $query = 'UPDATE ' . $wpdb->youpzt_messages.' SET `deleted` = "1" WHERE `id` = "' . $msg_id . '"';
+            }
+
+            if (!$wpdb->query($query)) {
+                $error = true;
+            }
+        }
+        if ($error) {
+            $status = __('错误，请再次尝试', 'youpzt');
+        } else {
+            $status = _n('消息已删除', '消息已删除', count($id), 'youpzt');
+        }
+    }
+    return $status;
 }
 ?>

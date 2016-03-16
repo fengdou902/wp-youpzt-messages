@@ -12,6 +12,93 @@ function youpzt_messages_send()
 	$option = get_option( 'youpzt_messages_option' );
 	if ($_REQUEST['page'] == 'youpzt_messages_send' && isset( $_POST['submit'] ) )
 	{
+		$status=deal_send_data();//处理过滤
+
+		echo '<div id="message" class="updated fade"><p>', implode( '</p><p>', $status ), '</p></div>';
+	}
+	?>
+	<?php do_action( 'youpzt_messages_before_form_send' ); ?>
+	<div class="send-page-wrap">
+    <form method="post" action="" id="send-form" enctype="multipart/form-data">
+	    <input type="hidden" name="page" value="youpzt_messages_send" />
+        <table class="form-table">
+            <tr>
+                <th><?php _e( '接收者', 'youpzt' ); ?></th>
+                <td>
+					<?php
+					// if message is not sent (by errors) or in case of replying, all input are saved
+
+					$recipient = !empty( $_POST['recipient'] ) ? $_POST['recipient'] : ( !empty( $_GET['recipient'] )
+						? $_GET['recipient'] : '' );
+
+					// strip slashes if needed
+					$subject = isset( $_REQUEST['subject'] ) ? ( get_magic_quotes_gpc() ? stripcslashes( $_REQUEST['subject'] )
+						: $_REQUEST['subject'] ) : '';
+					$subject = urldecode( $subject );  // for some chars like '?' when reply
+
+					if ( empty( $_GET['id'] ) )
+					{
+						$content = isset( $_REQUEST['content'] ) ?  $_REQUEST['content']  : '';
+					}else{
+						$id = $_GET['id'];
+						$msg = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $id . '" LIMIT 1' );
+
+						$content = '<p>&nbsp;</p>';
+						$content .= '<p>---</p>';
+						$content .= '<p><em>' . __( '时间: ', 'youpzt' ) . $msg->date . "\t" . $msg->sender . __( ' Wrote:', 'youpzt' ) . '</em></p>';
+						$content .= wpautop( $msg->content );
+						$content  = stripslashes( $content );
+					}
+					// if auto suggest feature is turned on
+					if ( $option['type'] == 'autosuggest'){
+						?>
+               <input id="recipient" type="text" name="recipient" class="large-text" />
+						<?php
+
+					}else{
+						// Get all users of blog
+						$args = array(
+							'order'   => 'ASC',
+							'orderby' => 'display_name' );
+						$values = get_users( $args );
+						$values = apply_filters( 'youpzt_messages_recipients', $values );
+						?>
+						<select name="recipient[]" multiple="multiple" size="5">
+							<?php
+							foreach ( $values as $value )
+							{
+								$selected = ( $value->ID == $recipient ) ? ' selected="selected"' : '';
+								echo "<option value='$value->ID'$selected>$value->display_name</option>";
+							}
+							?>
+						</select>
+						<?php
+					}
+					?>
+                </td>
+            </tr>
+            <tr>
+                <th><?php _e( '主题', 'youpzt' ); ?></th>
+                <td><input type="text" name="subject" value="<?php echo $subject; ?>" class="large-text ypzt-message-subject" /></td>
+            </tr>
+            <tr>
+                <th><?php _e( '内容', 'youpzt' ); ?></th>
+                <th><?php  wp_editor( $content, 'rw-text-editor', $settings = array( 'textarea_name' => 'content' ) );?></th>
+            </tr>
+	        <?php do_action( 'youpzt_messages_form_send' ); ?>
+        </table>
+	    <p class="submit"><input type="submit" value="发送" class="button-primary" id="submit" name="submit"></p>
+    </form>
+    </div>
+	<?php do_action( 'youpzt_messages_after_form_send' ); ?>
+</div>
+<?php
+
+}
+//处理数据
+function deal_send_data(){
+		global $wpdb, $current_user;
+		$option = get_option( 'youpzt_messages_option' );
 		$error = false;
 		$status = array();
 
@@ -129,85 +216,5 @@ function youpzt_messages_send()
 
 			$status[] = sprintf( _n( '%d 条信息已成功发送。', '%d 条信息已成功发送。', $numOK, 'youpzt' ), $numOK ) . ' ' . sprintf( _n( '%d 个出错.', '%d 个出错.', $numError, 'youpzt' ), $numError );
 		}
-
-		echo '<div id="message" class="updated fade"><p>', implode( '</p><p>', $status ), '</p></div>';
-	}
-	?>
-	<?php do_action( 'youpzt_messages_before_form_send' ); ?>
-	<div class="send-page-wrap">
-    <form method="post" action="" id="send-form" enctype="multipart/form-data">
-	    <input type="hidden" name="page" value="youpzt_messages_send" />
-        <table class="form-table">
-            <tr>
-                <th><?php _e( '接收者', 'youpzt' ); ?></th>
-                <td>
-					<?php
-					// if message is not sent (by errors) or in case of replying, all input are saved
-
-					$recipient = !empty( $_POST['recipient'] ) ? $_POST['recipient'] : ( !empty( $_GET['recipient'] )
-						? $_GET['recipient'] : '' );
-
-					// strip slashes if needed
-					$subject = isset( $_REQUEST['subject'] ) ? ( get_magic_quotes_gpc() ? stripcslashes( $_REQUEST['subject'] )
-						: $_REQUEST['subject'] ) : '';
-					$subject = urldecode( $subject );  // for some chars like '?' when reply
-
-					if ( empty( $_GET['id'] ) )
-					{
-						$content = isset( $_REQUEST['content'] ) ?  $_REQUEST['content']  : '';
-					}else{
-						$id = $_GET['id'];
-						$msg = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $id . '" LIMIT 1' );
-
-						$content = '<p>&nbsp;</p>';
-						$content .= '<p>---</p>';
-						$content .= '<p><em>' . __( '时间: ', 'youpzt' ) . $msg->date . "\t" . $msg->sender . __( ' Wrote:', 'youpzt' ) . '</em></p>';
-						$content .= wpautop( $msg->content );
-						$content  = stripslashes( $content );
-					}
-					// if auto suggest feature is turned on
-					if ( $option['type'] == 'autosuggest'){
-						?>
-               <input id="recipient" type="text" name="recipient" class="large-text" />
-						<?php
-
-					}else{
-						// Get all users of blog
-						$args = array(
-							'order'   => 'ASC',
-							'orderby' => 'display_name' );
-						$values = get_users( $args );
-						$values = apply_filters( 'youpzt_messages_recipients', $values );
-						?>
-						<select name="recipient[]" multiple="multiple" size="5">
-							<?php
-							foreach ( $values as $value )
-							{
-								$selected = ( $value->ID == $recipient ) ? ' selected="selected"' : '';
-								echo "<option value='$value->ID'$selected>$value->display_name</option>";
-							}
-							?>
-						</select>
-						<?php
-					}
-					?>
-                </td>
-            </tr>
-            <tr>
-                <th><?php _e( '主题', 'youpzt' ); ?></th>
-                <td><input type="text" name="subject" value="<?php echo $subject; ?>" class="large-text ypzt-message-subject" /></td>
-            </tr>
-            <tr>
-                <th><?php _e( '内容', 'youpzt' ); ?></th>
-                <th><?php  wp_editor( $content, 'rw-text-editor', $settings = array( 'textarea_name' => 'content' ) );?></th>
-            </tr>
-	        <?php do_action( 'youpzt_messages_form_send' ); ?>
-        </table>
-	    <p class="submit"><input type="submit" value="发送" class="button-primary" id="submit" name="submit"></p>
-    </form>
-    </div>
-	<?php do_action( 'youpzt_messages_after_form_send' ); ?>
-</div>
-<?php
-
+		return $status;
 }

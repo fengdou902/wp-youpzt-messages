@@ -44,5 +44,6 @@ global $post,$current_user;
 		<div id="pm-inbox" <?php if (!$show[1]) echo 'style="display:none"'; ?>><?php youpzt_messages_inbox($post->ID);?></div>
 		<div id="pm-outbox" <?php if (!$show[2]) echo 'style="display:none"'; ?>><?php youpzt_messages_outbox($post->ID);?></div>
 	</div>
+</div>
 
 <?php };?>

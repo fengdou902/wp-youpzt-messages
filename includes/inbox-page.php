@@ -67,69 +67,7 @@ function youpzt_messages_inbox($page_id=false)
 		return;
 	}
 
-	// if mark messages as msg_read
-	if ( isset( $_GET['action'] ) && 'mar' == $_GET['action'] && !empty( $_GET['id'] ) )
-	{
-		$id = $_GET['id'];
-
-		if ( !is_array( $id ) )
-		{
-			check_admin_referer( "ypm-mar_inbox_msg_$id" );
-			$id = array( $id );
-		}
-		else
-		{
-			check_admin_referer( "ypm-bulk-action_inbox" );
-		}
-		$n = count( $id );
-		$id = implode( ',', $id );
-		if ( $wpdb->query( 'UPDATE ' . $wpdb->youpzt_messages.' SET `msg_read` = "1" WHERE `id` IN (' . $id . ')' ) )
-		{
-			$status = _n( '条信息已标记为已读。', '条信息已标记为已读。', $n, 'youpzt' );
-		}else{
-			$status = __( '错误，请再次尝试', 'youpzt' );
-		}
-	}
-
-	// if delete message
-	if ( isset( $_GET['action'] ) && 'delete' == $_GET['action'] && !empty( $_GET['id'] ) )
-	{
-		$id = $_GET['id'];
-
-		if ( !is_array( $id ) )
-		{
-			check_admin_referer( "ypm-delete_inbox_msg_$id" );
-			$id = array( $id );
-		}else{
-			check_admin_referer( "ypm-bulk-action_inbox" );
-		}
-
-		$error = false;
-		foreach ( $id as $msg_id )
-		{
-			// check if the sender has deleted this message
-			$sender_deleted = $wpdb->get_var( 'SELECT `deleted` FROM ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $msg_id . '" LIMIT 1' );
-
-			// create corresponding query for deleting message
-			if ( $sender_deleted == 1 )
-			{
-				$query = 'DELETE from ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $msg_id . '"';
-			}else{
-				$query = 'UPDATE ' . $wpdb->youpzt_messages.' SET `deleted` = "2" WHERE `id` = "' . $msg_id . '"';
-			}
-
-			if ( !$wpdb->query( $query ) )
-			{
-				$error = true;
-			}
-		}
-		if ( $error )
-		{
-			$status = __( '错误，请再次尝试', 'youpzt' );
-		}else{
-			$status = _n( '消息已删除', '消息已删除', count( $id ), 'youpzt' );
-		}
-	}
+$status=deal_inbox_request_data();//过滤数据
 
 	// show all messages which have not been deleted by this user (deleted status != 2)
 	$msgs = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->youpzt_messages.' WHERE `to_user` = "' . $current_user->ID . '" AND `deleted` != "2" ORDER BY `date` DESC' );
@@ -243,11 +181,79 @@ function youpzt_messages_inbox($page_id=false)
 			</table>
 		</form>
 		<?php
-
 	}
 	?>
 </div>
-<?php
+<?php };
+
+function deal_inbox_request_data(){
+			global $wpdb, $current_user;
+		// if mark messages as msg_read
+	if ( isset( $_GET['action'] ) && 'mar' == $_GET['action'] && !empty( $_GET['id'] ) )
+	{
+		$id = $_GET['id'];
+
+		if ( !is_array( $id ) )
+		{
+			check_admin_referer( "ypm-mar_inbox_msg_$id" );
+			$id = array( $id );
+		}
+		else
+		{
+			check_admin_referer( "ypm-bulk-action_inbox" );
+		}
+		$n = count( $id );
+		$id = implode( ',', $id );
+		if ( $wpdb->query( 'UPDATE ' . $wpdb->youpzt_messages.' SET `msg_read` = "1" WHERE `id` IN (' . $id . ')' ) )
+		{
+			$status = _n( '条信息已标记为已读。', '条信息已标记为已读。', $n, 'youpzt' );
+		}else{
+			$status = __( '错误，请再次尝试', 'youpzt' );
+		}
+	}
+
+	// if delete message
+	if ( isset( $_GET['action'] ) && 'delete' == $_GET['action'] && !empty( $_GET['id'] ) )
+	{
+		$id = $_GET['id'];
+
+		if ( !is_array( $id ) )
+		{
+			check_admin_referer( "ypm-delete_inbox_msg_$id" );
+			$id = array( $id );
+		}else{
+			check_admin_referer( "ypm-bulk-action_inbox" );
+		}
+
+		$error = false;
+		foreach ( $id as $msg_id )
+		{
+			// check if the sender has deleted this message
+			$sender_deleted = $wpdb->get_var( 'SELECT `deleted` FROM ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $msg_id . '" LIMIT 1' );
+
+			// create corresponding query for deleting message
+			if ( $sender_deleted == 1 )
+			{
+				$query = 'DELETE from ' . $wpdb->youpzt_messages.' WHERE `id` = "' . $msg_id . '"';
+			}else{
+				$query = 'UPDATE ' . $wpdb->youpzt_messages.' SET `deleted` = "2" WHERE `id` = "' . $msg_id . '"';
+			}
+
+			if ( !$wpdb->query( $query ) )
+			{
+				$error = true;
+			}
+		}
+		if ( $error )
+		{
+			$status = __( '错误，请再次尝试', 'youpzt' );
+		}else{
+			$status = _n( '消息已删除', '消息已删除', count( $id ), 'youpzt' );
+		}
+	}
+
+	return $status;
 }
 
 ?>
+
